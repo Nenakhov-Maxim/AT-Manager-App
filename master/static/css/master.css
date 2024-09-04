@@ -132,6 +132,21 @@
   font-size: 12px;
 }
 
+.toolbars__sub_tasks img {
+  width: 40px;
+  margin-right: 10px;
+}
+
+.toolbars__sub_tasks a {
+  align-items: center;
+  text-align: center;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
 .toolbars__new-task {
   position: relative;
   transition: all 2s ease;
