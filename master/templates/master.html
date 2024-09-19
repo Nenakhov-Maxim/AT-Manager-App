@@ -145,6 +145,13 @@
               </div>             
               <span class="task-status__text">Выполнено. Фактическая дата выполнения: <br> {{el.task_timedate_end_fact}}</span>
             </div>
+            {% elif el.task_status_id == 7 %}
+            <div class="card-item__task-status">
+              <div class="task-status-widget">              
+                <span class="task-status-widget__text settingUp">{{el.task_status}}</span>
+              </div>             
+              <span class="task-status__text">Наладка оборудования. Старт: {{el.task_time_settingUp}}</span>
+            </div>
             {% endif %}
             <div class="card-item__position-quantity">
               <span class="card-item__title">{{el.task_profile_amount}}</span>
