@@ -6,12 +6,6 @@ from .forms import PauseTaskForm, DenyTaskForm
 import datetime
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
-from django.views.decorators import gzip
-from django.http import StreamingHttpResponse
-import cv2
-import threading
-from ultralytics import YOLO
-import asyncio
 from django.views.decorators.csrf import csrf_exempt
 
 # Стратовая страница

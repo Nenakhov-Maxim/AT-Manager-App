@@ -193,6 +193,7 @@
   color: white;
   background-color: black;
   border-bottom: 1px solid #333;
+  align-items: center;
 }
 
 .task-cards-list {
@@ -524,7 +525,32 @@
   width: 30px;
   height: 30px;
   top: -3px;
-  right: -50px;
+  right: -40px;
+  cursor: pointer;
+}
+
+.more-info__text__setting-up { 
+  position: relative;
+  border-bottom: 1px dashed;
+  cursor: pointer;
+}
+
+.more-info__text__setting-up:hover {
+  color: #C21500;
+  border-bottom: 1px dashed #C21500
+}
+
+.more-info__text__setting-up::after {
+  position: absolute;
+  content: '';
+  background-image: url('../img/setting-configuration.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 30px;
+  height: 30px;
+  top: -3px;
+  right: -80px;
   cursor: pointer;
 }
 
