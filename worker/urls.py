@@ -20,6 +20,7 @@ urlpatterns = [
     path('week/', views.task_week, name='week_filter'),
     path('month/', views.task_month, name='month_filter'),
     path('pause_task/', views.pause_task, name='pause_working'),
-    path('deny_task/', views.deny_task, name='pause_working'),
-    path('complete_task/', views.complete_task, name='pause_working'),    
+    path('deny_task/', views.deny_task, name='deny_working'),
+    path('complete_task/', views.complete_task, name='complete_working'),
+    path('setting-up/', views.start_settingUp, name='settingUp'),    
 ]

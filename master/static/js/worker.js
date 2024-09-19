@@ -53,6 +53,37 @@ function start_working(elem) {
     }
 }
 
+
+//Старт пусконаладки
+
+$('.more-info__text__setting-up').click(function(){
+  let task = this;    
+  let id_task = task.dataset.itemid;  
+  
+  $.ajax({
+
+    url: 'setting-up/',
+    
+    type: 'GET',
+    
+    data: {'id_task': id_task},
+
+    headers: {
+        "Accept": "network/json",
+        "Content-Type": "network/json",        
+    },
+    
+    success: function(data){
+      console.log(data.answer) 
+    },
+  
+    error: function(){  
+    alert('Error!');  
+    }      
+  });  
+})
+
+
 //Действие при измнении количества записей на листе
 let start_value = 0
 let all_cards = document.querySelectorAll('.task-card-item')

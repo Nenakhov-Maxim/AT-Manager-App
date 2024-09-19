@@ -132,3 +132,11 @@ def complete_task(request):
     result = data_task.complete_task(id_task, user_name, user_position)
        
     return HttpResponse(result)
+  
+# Старт наладки/переналадки
+@login_required
+@permission_required(perm='worker.change_workertypeproblem', raise_exception=True)
+def start_settingUp(request):
+  id_task = request.GET.get('id_task')
+  print(id_task)
+  return JsonResponse({'answer':f'Задача № {id_task}. Старт переналадки'})

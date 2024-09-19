@@ -8,5 +8,5 @@ class User(AbstractUser):
   production_area_id = models.ForeignKey(master_models.Workplace,  null=True, on_delete=models.SET_NULL)
   production_area = models.CharField(max_length=100, verbose_name='Производственный участок')
   access_page = models.CharField(max_length=100, verbose_name='Перечень страниц для доступа')
-  settingUp = HStoreField(null=True)
+  
   

@@ -238,4 +238,7 @@ class DatabaseWork:
     else:
       return history_check[1]
     
+  # Старт переналадки
+  def start_settingUp(self, id_task, user_name):
+    pass
      
