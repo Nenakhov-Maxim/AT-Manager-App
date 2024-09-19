@@ -345,6 +345,11 @@
   color: #deece1;
 }
 
+.settingUp {
+  background-color: #580254;
+  color: #deece1; 
+}
+
 .falling-off::before {
   position: absolute;
   content: '';
@@ -395,6 +400,17 @@
   width: 10px;
   height: 10px;
   background-color: #03532b;
+  left: 14px;
+  top: 8px;
+  border-radius: 100%;
+}
+
+.settingUp::before {
+  position: absolute;
+  content: '';
+  width: 10px;
+  height: 10px;
+  background-color: #2e012c;
   left: 14px;
   top: 8px;
   border-radius: 100%;

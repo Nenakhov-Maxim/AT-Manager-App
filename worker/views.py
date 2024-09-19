@@ -16,7 +16,7 @@ def worker_home(request, filter='all'):
   new_deny_form = DenyTaskForm()  
   now = datetime.datetime.now()
   area_id = request.user.production_area_id
-  tasks = Tasks.objects.all().filter(task_workplace=area_id, task_status_id__in=[3, 4])
+  tasks = Tasks.objects.all().filter(task_workplace=area_id, task_status_id__in=[3, 4, 7])
   task_to_start = tasks.filter(task_status_id=4).count
   task_start= tasks.filter(task_status_id=3).count
   user_info = [request.user.first_name, request.user.last_name, request.user.position, request.user.production_area_id]
@@ -130,7 +130,6 @@ def complete_task(request):
     user_position = request.user.position
     data_task = DatabaseWork({'id_task':id_task})
     result = data_task.complete_task(id_task, user_name, user_position)
-       
     return HttpResponse(result)
   
 # Старт наладки/переналадки
@@ -138,5 +137,7 @@ def complete_task(request):
 @permission_required(perm='worker.change_workertypeproblem', raise_exception=True)
 def start_settingUp(request):
   id_task = request.GET.get('id_task')
-  print(id_task)
-  return JsonResponse({'answer':f'Задача № {id_task}. Старт переналадки'})
+  user_name = f'{request.user.last_name} {request.user.first_name}'  
+  data_task = DatabaseWork({'id_task':id_task})
+  result = data_task.start_settingUp(id_task, user_name)  
+  return JsonResponse({'answer':result})

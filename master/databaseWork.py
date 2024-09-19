@@ -240,5 +240,28 @@ class DatabaseWork:
     
   # Старт переналадки
   def start_settingUp(self, id_task, user_name):
-    pass
+    now = datetime.datetime.now()
+    task = Tasks.objects.get(id=id_task)
+    history_task = Task_history.objects.get(id=task.task_history_id)
+    new_event = history_task.history_name
+    max_key = max(new_event, key=new_event.get)
+    new_event[int(max_key) + 1] = f"{now};Задача № {id_task};{user_name}, Старт наладки оборудования"
+    history_check = [False, '']
+    try:
+      history_task.history_name = new_event
+      history_task.save(update_fields=['history_name'])
+      history_check = [True, '']            
+    except Exception as e:
+      history_check = [False, f'Ошибка изменения истории: {e}']    
+    
+    if history_check[0] ==  True:      
+      try:
+        task.task_status_id = 7
+        task.task_time_settingUp = now
+        task.save(update_fields=['task_status_id', 'task_time_settingUp'])
+        return  f'Задача № {id_task}. Старт переналадки'
+      except Exception as e:
+        return f'Ошибка изменения статуса задачи: {e}'
+    else:
+      return history_check[1]
      
