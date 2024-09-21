@@ -333,16 +333,16 @@ $(document).ready(function() {
 
 // Передача видео через websocket
 
-$(document).ready(function() {
-  let list_task = document.querySelectorAll('.task-card-item[data-category="Выполняется"]')
-  for (const elem in list_task) {
-    if (Object.prototype.hasOwnProperty.call(list_task, elem)) {
-      const task = list_task[elem];
-      let task_id = task.dataset.itemid
-      videoStream(task_id)
-    }
-  }
-})
+// $(document).ready(function() {
+//   let list_task = document.querySelectorAll('.task-card-item[data-category="Выполняется"]')
+//   for (const elem in list_task) {
+//     if (Object.prototype.hasOwnProperty.call(list_task, elem)) {
+//       const task = list_task[elem];
+//       let task_id = task.dataset.itemid
+//       videoStream(task_id)
+//     }
+//   }
+// })
 
 function videoStream(task_id){  
   const video = document.getElementById('videoElement');

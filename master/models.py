@@ -66,6 +66,7 @@ class Tasks(models.Model):
   task_timedate_end_fact = models.DateTimeField('Фактическая дата и время окончания', null=True, blank=True)
   task_is_vision = models.BooleanField('Видимость задачи', default=True)
   task_time_settingUp = models.DateTimeField('Фактическая дата и время начала наладки', null=True, blank=True)
+  profile_amount_now = models.BigIntegerField('Количество профиля текущего', default=0)
   
   def __str__(self):
     return self.task_name

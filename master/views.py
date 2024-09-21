@@ -51,7 +51,7 @@ def pause_task(request, id_task):
       new_data_file = DatabaseWork(new_paused_form.cleaned_data)                   
       new_task_file = new_data_file.paused_task(user_name, user_position, id_task)        
       if  new_task_file == True:
-        print(f'Добавление прошло успешно, id записи: {new_data_file.new_task_id}')
+        # print(f'Добавление прошло успешно, id записи: {new_data_file.new_task_id}')
         return redirect('/master', permanent=True)
       else:
         return HttpResponse(f'Ошибка: {new_task_file}')
@@ -70,7 +70,7 @@ def new_task(request):
       if new_history_file == True:        
         new_task_file = new_data_file.add_new_task_data(user_name)        
         if  new_task_file == True:
-          print(f'Добавление прошло успешно, id записи: {new_data_file.new_task_id}')
+          # print(f'Добавление прошло успешно, id записи: {new_data_file.new_task_id}')
           return redirect('/master', permanent=True)
         else:
           return HttpResponse(f'Ошибка: {new_task_file}')
@@ -111,7 +111,7 @@ def edit_task(request):
       #new_history_file = new_data_file.add_new_history_data(user_name, user_position)       
       new_task_file = new_data_file.edit_data_from_task(user_name, user_position, id_task)        
       if  new_task_file == True:
-        print(f'Добавление прошло успешно, id записи: {new_data_file.new_task_id}')
+        # print(f'Добавление прошло успешно, id записи: {new_data_file.new_task_id}')
         return redirect('/master', permanent=True)
       else:
         return HttpResponse(f'Ошибка: {new_task_file}')

@@ -128,9 +128,11 @@ def complete_task(request):
     id_task = request.GET.get('id_task')
     user_name = f'{request.user.last_name} {request.user.first_name}'
     user_position = request.user.position
+    id_user = request.user.id
     data_task = DatabaseWork({'id_task':id_task})
-    result = data_task.complete_task(id_task, user_name, user_position)
-    return HttpResponse(result)
+    # result = data_task.complete_task(id_task, user_name, user_position)
+    data_task.add_data_to_user_analytics(int(id_user), int(id_task))
+    return HttpResponse('') #result
   
 # Старт наладки/переналадки
 @login_required

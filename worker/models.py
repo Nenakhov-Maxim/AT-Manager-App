@@ -11,6 +11,7 @@ class Users_analytics(models.Model):
   userId =  models.ForeignKey(login_model.User, null=True, on_delete=models.SET_NULL)
   settingUp = HStoreField('Количество времени на переналадку', null=True)
   profile_amount = HStoreField('Количество изготовленного профиля по датам', null=True)
+  work_time = HStoreField('Время полезной работы', null=True)
   
   def __str__(self):
-    return f''
+    return self.userId
