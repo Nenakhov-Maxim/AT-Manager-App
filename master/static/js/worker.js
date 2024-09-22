@@ -74,7 +74,7 @@ $('.more-info__text__setting-up').click(function(){
     },
     
     success: function(data){
-      console.log(data.answer) 
+      location.reload();  
     },
   
     error: function(){  
@@ -275,7 +275,7 @@ $(document).ready(function() {
     let id_task = task.dataset.itemid;
     let main_block_task = $(`.task-card-item[data-itemid=${id_task}]`)[0]    
     let plan_profile_amount = main_block_task.querySelector('.right-side__required-quantity__amount').innerText
-    let fact_profile_amount = main_block_task.querySelector('.right-side__current-quantity__amount').innerText
+    let fact_profile_amount = main_block_task.querySelector('.right-side__current-quantity__amount').value
     if (Number(plan_profile_amount) != Number(fact_profile_amount)) {
       let isUserReady = confirm("Вы уверены, что хотите завершить задачу? Плановое и фактическое количество профиля не совпадают");
       if (isUserReady) {
@@ -310,7 +310,7 @@ $(document).ready(function() {
         
         type: 'GET',
         
-        data: {},
+        data: {'id_task': id_task},
     
         headers: {
             "Accept": "network/json",
@@ -331,7 +331,7 @@ $(document).ready(function() {
 });
 
 
-// Передача видео через websocket
+// Передача видео через websocket (Необходимо раскомментить, как только подключу камеру!)
 
 // $(document).ready(function() {
 //   let list_task = document.querySelectorAll('.task-card-item[data-category="Выполняется"]')
@@ -344,7 +344,8 @@ $(document).ready(function() {
 //   }
 // })
 
-function videoStream(task_id){  
+function videoStream(task_id){
+  let new_profile_amount = 0  
   const video = document.getElementById('videoElement');
   const canvas = document.getElementById('canvas');
   const context = canvas.getContext('2d');
@@ -361,19 +362,39 @@ function videoStream(task_id){
   });
 
   socket.onopen = function() {
+      socket.send(JSON.stringify({chgVal: 0, isFs: 1, task_id: task_id}))
+
       setInterval(() => {
           context.drawImage(video, 0, 0, canvas.width, canvas.height);
           const imageData = canvas.toDataURL('image/jpeg', 0.4); //0.4 - качество изображения, изменить при плохом обнаружении
-          socket.send(JSON.stringify({ image: imageData.split(',')[1] }));
+          socket.send(JSON.stringify({ image: imageData.split(',')[1], isFs: 0, chgVal: 0}));
       }, 250); // Отправка кадра каждые 250 мс
+
+      let current_card = document.querySelector(`.task-card-item[data-itemId="${task_id}"]`)
+      let input_element = current_card.querySelector('.right-side__current-quantity__amount')
+      input_element.addEventListener('keypress', function(e){
+        var key = e.which;
+        if(key == 13)  {          
+          input_element.blur()
+        }
+      })
+      input_element.addEventListener('blur', () =>{
+        socket.send(JSON.stringify({chgVal: 1, isFs: 0, value: input_element.value}))  
+      })
+
   };
 
   socket.onmessage = function(event) {
     const data = JSON.parse(event.data);
     const processedImage = data.processed_image;
     const last_id = data.max_id_profile
-    let task_count = document.querySelector('.task-card-item[data-category="Выполняется"]')
-    task_count.querySelector('.right-side__current-quantity__amount').innerText = Number(last_id)
+    let task_count = document.querySelector('.task-card-item[data-category="Выполняется"]') 
+    required_quantity = task_count.querySelector('.right-side__required-quantity__amount').innerText
+    if (new_profile_amount != Number(last_id)) {
+      task_count.querySelector('.right-side__current-quantity__amount').value = Number(last_id) 
+      new_profile_amount = Number(last_id) 
+    }   
+      
 
     // В элемент img отображаем обработанное изображение
     
@@ -382,132 +403,46 @@ function videoStream(task_id){
   };
 }
 
+// Изменение количества профиля вручную на наладке (на выполнении меняется через вебсоккет)
 
+$(document).ready(function(){
+  let profile_amount_input = document.querySelectorAll('.task-card-item[data-category="Наладка"]') // При работе без камеры вставить строку document.querySelectorAll('.task-card-item[data-category="Выполняется"], .task-card-item[data-category="Наладка"]')
+  for (const item in profile_amount_input) {
+    if (Object.prototype.hasOwnProperty.call(profile_amount_input, item)) {
+      const card_element = profile_amount_input[item];
+      let id_task = card_element.dataset.itemid      
+      input_element = card_element.querySelector('.right-side__current-quantity__amount')      
+      input_element.addEventListener('keypress', function(e){
+        var key = e.which;
+        if(key == 13)  {          
+          input_element.blur()
 
+        }
+      })
+      input_element.addEventListener('blur', () =>{
 
+        $.ajax({
 
-
-
-
-
-
-
-
-
-
-
-
-
-// let mediaRecorder;
-// let recordedChunks = [];
-// const video = document.getElementById('video-stream-ai');
-// const video_socket = new WebSocket('ws://' + window.location.host + '/ws/video/');
-
-// navigator.mediaDevices.getUserMedia({ video: true })
-// .then(stream => {
-//     video.srcObject = stream;
-//     mediaRecorder = new MediaRecorder(stream);
-
-//     mediaRecorder.ondataavailable = function(event) {
-//         if (event.data.size > 0) {
-//             recordedChunks.push(event.data);
-//         }
-//     };
-
-//     mediaRecorder.onstop = function() {
-//         const blob = new Blob(recordedChunks, { type: 'video/webm' });
-//         const reader = new FileReader();
-//         reader.readAsDataURL(blob);
-//         reader.onloadend = function() {
-//             const base64data = reader.result.split(',')[1];  //Извлекаем только данные
-//             sendVideo(base64data);
-//           };
-//           recordedChunks = [];
-//       };
-//   });
-
-//   document.getElementById('startButton').onclick = function() {
-//       recordedChunks = [];
-//       mediaRecorder.start();
-//   };
-
-//   document.getElementById('stopButton').onclick = function() {
-//       mediaRecorder.stop();
-//   };
-
-//   function sendVideo(videoData) {
-//     video_socket.send(JSON.stringify({
-//           'video': videoData
-//       }));
-//   }
-
-//   video_socket.onmessage = function(event) {
-//       const data = JSON.parse(event.data);
-//       console.log(data.status);  // Ответ сервера
-//   };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// $(document).ready(function() {
-
-//   interval_count = setInterval(count_profile, 5000);
-// })
-
-// function count_profile()  {
-  
-//   $.ajax({
-
-//     url: 'count_profile/',
-    
-//     type: 'GET',
-    
-//     data: {},
-
-//     headers: {
-//         "Accept": "network/json",
-//         "Content-Type": "network/json",        
-//     },
-    
-//     success: function(data){ 
-//       let task_count = document.querySelector('.task-card-item[data-category="Выполняется"]')
-//       let task_count_text = task_count.querySelector('.right-side__current-quantity__amount').innerText
-//       let task_count_plan = task_count.querySelector('.right-side__required-quantity__amount').innerText
-//       task_count.querySelector('.right-side__current-quantity__amount').innerText = data
+          url: 'edit-profile-amount-value/',
+          
+          type: 'GET',
+          
+          data: {'id_task': id_task, 'value': input_element.value},
       
-//       if (Number(task_count_plan) <= Number(task_count_text)) {
-//         clearInterval(interval_count);
-//         alert('Изготовлено необходимое количество профиля');  
-//       }
-//     },
-  
-//     error: function(){  
-//     // alert('Error!');
-//     clearInterval(interval_count);  
-//     }      
-//   });  
-// }
-
-
-
+          headers: {
+              "Accept": "network/json",
+              "Content-Type": "network/json",        
+          },
+          
+          success: function(data){ 
+            console.log(data.answer)          
+          },
+        
+          error: function(){  
+          alert('Error!');  
+          }      
+        });
+      })
+    }
+  }
+})

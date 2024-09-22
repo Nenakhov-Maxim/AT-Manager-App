@@ -248,6 +248,18 @@
                   </div>                  
                 </div>
               </div>           
+            </div>
+            {% elif el.task_status_id == 7 %}
+            <div class="card-item__actions">
+              <div class="actions__more-info">
+                <span class="more-info__text">Подробнее</span>
+                <div class="more-info-popup disable">
+                  <span class="close-popup">X</span>                  
+                  <div id="pause" class="more-info-popup__start-task" data-itemId={{el.id}}>
+                    <a href="#" class="start-task__link">Приостановить</a>
+                  </div>                  
+                </div>
+              </div>           
             </div>   
             {% endif %}
           </div>

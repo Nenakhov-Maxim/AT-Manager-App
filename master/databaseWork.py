@@ -9,7 +9,7 @@ class DatabaseWork:
     self.data = data
     self.history_id = -1
     self.new_task_id = -1
-    self.now = datetime.datetime.now(pytz.timezone('Asia/Yekaterinburg'))
+    self.now = datetime.datetime.now()  # pytz.timezone('Asia/Yekaterinburg')
   
   
   # Добавить новую задачу (мастер)  
@@ -140,7 +140,7 @@ class DatabaseWork:
         task_comments = self.data['task_comments'],
         task_timedate_start_fact = None     
       )
-        # print(number) # количество обновленных строк
+        # number - количество обновленных строк
         return  True
       except Exception as e:
         return f'Ошибка изменения статуса задачи: {e}'
@@ -172,7 +172,7 @@ class DatabaseWork:
         task_timedate_start_fact = self.now,
         task_status_id = 3     
       )
-        # print(number) # количество обновленных строк
+        # number - количество обновленных строк
         return  True
       except Exception as e:
         return f'Ошибка изменения статуса задачи: {e}'
@@ -271,8 +271,7 @@ class DatabaseWork:
       return history_check[1]
     
   # Изменяем данные для пользовательской аналитики   
-  def add_data_to_user_analytics(self, user_id, id_task):    
-    # now = datetime.datetime.now()
+  def add_data_to_user_analytics(self, user_id, id_task): 
     string_date_key = f'{self.now.month}.{self.now.year}'
     task = Tasks.objects.get(id=id_task)
     date_start_settingUp =task.task_time_settingUp 
@@ -288,8 +287,7 @@ class DatabaseWork:
       date_end_work = date_end_work .replace(tzinfo=None)
     time_settingUp = round((date_start_work - date_start_settingUp).seconds/60/60, 2)    
     profile_amount = task.task_profile_amount
-    work_time = round((date_end_work - date_start_work).seconds/60/60, 2)    
-    print(work_time)
+    work_time = round((date_end_work - date_start_work).seconds/60/60, 2) 
     analytics_item = Users_analytics.objects.all().filter(userId_id=user_id)
     #Если записи найдены то проверям текущий месяц
     #Одновременно обновляем значения для наладки и количества изготовленного профиля (не вижу возможности, чтобы при наличие записи в переналадке, что-то отсутствовало в количестве изготовленного профиля)
@@ -311,9 +309,8 @@ class DatabaseWork:
               old_time_settingUp = item_sup.split(':')[1]
               # Если же ID задачи найден то мы обновлем нужную запись, обнавлем переменную check_search_id  (флаг, что мы нашли запись) и собираем дальше строку, заканчивая цикл
               if str(id_task)==task_id:
-                # print('Существует задача с таким же ID в переналадке')              
-                new_string_value_settingUp = new_string_value_settingUp + f'{task_id}:{time_settingUp};'
-                # print('Запись в строке обновлена')                 
+                # Существует задача с таким же ID в переналадке             
+                new_string_value_settingUp = new_string_value_settingUp + f'{task_id}:{time_settingUp};'               
               else:
                 new_string_value_settingUp = new_string_value_settingUp + item_sup + ';'
           # Здесь тоже самое но по количеству изготовленного профиля    
@@ -323,10 +320,8 @@ class DatabaseWork:
               old_time_settingUp = item_pa.split(':')[1]
               # Если же ID задачи найден то мы обновлем нужную запись, обнавлем переменную check_search_id  (флаг, что мы нашли запись) и собираем дальше строку, заканчивая цикл
               if str(id_task)==task_id:
-                # print('Существует задача с таким же ID в количестве изготовленного профиля')              
-                new_string_value_profile_amount = new_string_value_profile_amount + f'{task_id}:{profile_amount};'
-                # print('Запись в строке обновлена') 
-                # check_search_id =  True
+                # Существует задача с таким же ID в количестве изготовленного профиля              
+                new_string_value_profile_amount = new_string_value_profile_amount + f'{task_id}:{profile_amount};'            
               else:
                 new_string_value_profile_amount = new_string_value_profile_amount + item_pa + ';'
            # Здесь тоже самое но по количеству полезного рабочего времени   
@@ -336,9 +331,9 @@ class DatabaseWork:
               old_time_settingUp = item_wt.split(':')[1]
               # Если же ID задачи найден то мы обновлем нужную запись, обнавлем переменную check_search_id  (флаг, что мы нашли запись) и собираем дальше строку, заканчивая цикл
               if str(id_task)==task_id:
-                # print('Существует задача с таким же ID в количестве изготовленного профиля')              
+                # Существует задача с таким же ID в количестве изготовленного профиля              
                 new_string_value_wokrtime = new_string_value_wokrtime + f'{task_id}:{work_time};'
-                # print('Запись в строке обновлена') 
+                # Запись в строке обновлена
                 check_search_id =  True
               else:
                 new_string_value_wokrtime = new_string_value_wokrtime + item_wt + ';'
@@ -354,20 +349,32 @@ class DatabaseWork:
             )
           # Добавляем новое запись в БД, если предыдущее условие не сработало
           else:
-              # print('Задачи с таким же ID не существует.  Добавляем новое зеачение')  
+              # Задачи с таким же ID не существует.  Добавляем новое зеачение  
               new_dic_settingUp = {string_date_key:f'{new_string_value_settingUp}{id_task}:{time_settingUp};'}
               new_dic_profile_amount = {string_date_key:f'{new_string_value_profile_amount}{id_task}:{profile_amount};'}
               new_dic_worktime = {string_date_key:f'{new_string_value_wokrtime}{id_task}:{work_time};'}
               analytics_item = Users_analytics.objects.all().filter(userId_id=user_id).update(
               settingUp=new_dic_settingUp,
-              profile_amount=new_dic_profile_amount
+              profile_amount=new_dic_profile_amount,
+              work_time=new_dic_worktime
             )
     else:
-      # print('Пользователь не найден')
+      # Пользователь не найден
       new_task_time_settingUp = f'{id_task}:{time_settingUp};'
       new_task_profile_amount = f'{id_task}:{profile_amount};'
       new_task_woktime = f'{id_task}:{work_time};'
-      Users_analytics.objects.create(userId_id=user_id, settingUp={string_date_key:new_task_time_settingUp}, profile_amount={string_date_key:new_task_profile_amount}, work_time ={string_date_key:new_task_woktime})      
+      Users_analytics.objects.create(userId_id=user_id, settingUp={string_date_key:new_task_time_settingUp},
+                                     profile_amount={string_date_key:new_task_profile_amount},
+                                     work_time ={string_date_key:new_task_woktime})   
+  def change_profile_amount(self, id_task, value):
+    task = Tasks.objects.get(id=id_task)
+    try:
+      task.profile_amount_now = int(value)      
+      task.save(update_fields=['profile_amount_now'])
+      return True
+    except Exception as e:
+      print(f'Ошибка изменения текущего количества профиля в задаче: {e}') 
+      return False 
     
     
     

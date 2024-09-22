@@ -56,11 +56,14 @@
   flex-wrap: nowrap;
   flex-direction: column;
   text-align: center;
+  align-items: center;
 }
 
 .right-side__current-quantity__amount {
   font-size: 24px;
   color: #C21500;
+  text-align: center;
+  width: 150px;
 }
 
 .event-leftside__buttons {

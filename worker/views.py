@@ -130,7 +130,7 @@ def complete_task(request):
     user_position = request.user.position
     id_user = request.user.id
     data_task = DatabaseWork({'id_task':id_task})
-    # result = data_task.complete_task(id_task, user_name, user_position)
+    result = data_task.complete_task(id_task, user_name, user_position)
     data_task.add_data_to_user_analytics(int(id_user), int(id_task))
     return HttpResponse('') #result
   
@@ -143,3 +143,16 @@ def start_settingUp(request):
   data_task = DatabaseWork({'id_task':id_task})
   result = data_task.start_settingUp(id_task, user_name)  
   return JsonResponse({'answer':result})
+
+# Изменение текущего количества профиля в БД
+@login_required
+@permission_required(perm='worker.change_workertypeproblem', raise_exception=True)
+def edit_profile_amount(request):
+  task_id = request.GET.get('id_task')
+  value = request.GET.get('value')
+  data_task = DatabaseWork({'id_task':task_id})
+  result = data_task.change_profile_amount(task_id, value)
+  if result:
+    return JsonResponse({'answer':'ОК'})
+  else:
+    return JsonResponse({'answer':'Error'})
