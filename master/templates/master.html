@@ -42,6 +42,7 @@
           <span class="person-info__name">{{ user.last_name }} {{ user.first_name }}</span>
           <span class="person-info__department">{{user.position}}</span>
           <span class="person-info__department">{{user.production_area}}</span>
+          <!-- <span class="person-info__department">{{ request.META }}</span> -->
         </div>
         <div class="logout">
           <a href="{% url 'users:logout' %}" class="logout-link">Выход</a>

@@ -15,8 +15,10 @@ function open_task_history(id_task, card_item) {
   let popup_history = card_item.querySelector('.task-card__more-information__wrapper')  
   if (popup_history.classList.contains('disable')) {
     popup_history.classList.remove('disable')
+    card_item.querySelector('.toolbar-item__history__svg').src = '/static/img/master_top.svg'
   } else {
     popup_history.classList.add('disable')
+    card_item.querySelector('.toolbar-item__history__svg').src = '/static/img/Master.svg'
   }
 };
 
@@ -374,6 +376,7 @@ $(document).ready(function() {
 
   $('.quality-position__title').change(() => change_block_in_page(true));
   $('.navigation__right').click(() => right_in_page());
+  $('.navigation__left').click(() => left_in_page());
 });
 
 // Изменение количества отображаемых задач на странице
@@ -384,7 +387,11 @@ function change_block_in_page(pos)  {
   }
 
   let value_re = document.querySelector('.quality-position__title').value
-  document.querySelector('.all-task-info__range').innerText = `${start_value + 1}-${start_value + 1} из ${all_cards.length}` 
+  let second_value_for_visible = Number(start_value) + Number(value_re)
+  if  (second_value_for_visible > all_cards.length)  {
+    second_value_for_visible = all_cards.length
+  }
+  document.querySelector('.all-task-info__range').innerText = `${start_value + 1}-${second_value_for_visible} из ${all_cards.length}` 
   
   for (let i = 0; i < all_cards.length; i++) {
     const element = all_cards[i]; 
@@ -403,12 +410,23 @@ function change_block_in_page(pos)  {
 function right_in_page() {
   let value_res = document.querySelector('.quality-position__title').value
 
-  if (Number(start_value) + Number(value_res) < all_cards.length) {
-    console.log(`start_value=${start_value}`)    
+  if (Number(start_value) + Number(value_res) < all_cards.length) {        
     start_value = start_value + Number(value_res)
     change_block_in_page(false)
   } else {    
     change_block_in_page(true)
+  } 
+}
+
+function left_in_page() {
+  let value_res = document.querySelector('.quality-position__title').value
+
+  if (Number(start_value) - Number(value_res) < 0) {      
+    start_value = (all_cards.length - 1) - ((all_cards.length - 1) % value_res)
+    change_block_in_page(false)
+  } else {    
+    start_value = Number(start_value) - Number(value_res)
+    change_block_in_page(false)
   } 
 }
 

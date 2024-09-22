@@ -93,17 +93,26 @@ $(document).ready(function() {
   change_block_in_page()
   $('.quality-position__title').change(() => change_block_in_page(true));
   $('.navigation__right').click(() => right_in_page());
+  $('.navigation__left').click(() => left_in_page());
 
 });
 
-function change_block_in_page(pos)  {  
+function change_block_in_page(pos)  {
+
   if (pos == true) {
     start_value = 0
-  }    
+  }
+
   let value_re = document.querySelector('.quality-position__title').value
-  document.querySelector('.all-task-info__range').innerText = `${start_value + 1}-${start_value + 1} из ${all_cards.length}` 
+  let second_value_for_visible = Number(start_value) + Number(value_re)
+  if  (second_value_for_visible > all_cards.length)  {
+    second_value_for_visible = all_cards.length
+  }
+  document.querySelector('.all-task-info__range').innerText = `${start_value + 1}-${second_value_for_visible} из ${all_cards.length}` 
+  
   for (let i = 0; i < all_cards.length; i++) {
-    const element = all_cards[i];
+    const element = all_cards[i]; 
+
     if (i >= Number(value_re) + Number(start_value) || i < start_value) {
       element.classList.add('disable')
     } else {
@@ -123,6 +132,18 @@ function right_in_page() {
     
   } else {    
     change_block_in_page(true)
+  } 
+}
+
+function left_in_page() {
+  let value_res = document.querySelector('.quality-position__title').value
+
+  if (Number(start_value) - Number(value_res) < 0) {      
+    start_value = (all_cards.length - 1) - ((all_cards.length - 1) % value_res)
+    change_block_in_page(false)
+  } else {    
+    start_value = Number(start_value) - Number(value_res)
+    change_block_in_page(false)
   } 
 }
 
