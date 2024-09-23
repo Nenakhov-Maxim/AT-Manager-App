@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'master',
     'worker',
     'login',
+    'analytics',
     'django_admin_hstore_widget',
     'django.contrib.postgres',
     'jinja2',    
@@ -64,7 +65,7 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [            
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "app/templates",],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

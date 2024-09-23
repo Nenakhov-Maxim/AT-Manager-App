@@ -29,5 +29,5 @@ urlpatterns = [
     path('', include('login.urls', namespace='users')),
     path('master/', include('master.urls'), name='master'),
     path('worker/', include('worker.urls'), name='worker'),
-    # path('enter-app/', include('rest_framework.urls')),
+    path('analytics/', include('analytics.urls'), name='analytics'),    
 ]
