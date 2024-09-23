@@ -23,7 +23,7 @@ class LoginUser(LoginView):
     elif 'master.view_tasks' in self.request.user.get_group_permissions():
       # print('Перенаправляем на master')
       return reverse_lazy('master')
-    else: #'workers.view_tasks' in self.request.user.get_group_permissions():
+    elif 'worker.change_workertypeproblem' in self.request.user.get_group_permissions():
       # print('Перенаправляем на worker')
       return reverse_lazy('worker')
     
