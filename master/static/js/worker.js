@@ -28,6 +28,12 @@ function start_working(elem) {
   if (start_time_from_data.length > 0)  {
     alert('Нельзя запустить несколько задач одновременно. Пожалуйста завершите другие задачи.')
   } else {
+    let isUserReady = true    
+    if (elem.closest('.task-card-item').dataset.category == 'Ожидание') {
+      let isUserReady = confirm("Вы уверены, что хотите начать выполнения задания без переналадки? Время на переналадку будет равно 0");
+    }
+    
+    if (isUserReady) {
 
       $.ajax({
   
@@ -49,8 +55,9 @@ function start_working(elem) {
         error: function(){  
         alert('Error!');  
         }      
-      }); 
-    }
+      });
+    } 
+  }
 }
 
 
@@ -427,7 +434,9 @@ function videoStream(task_id){
 // Изменение количества профиля вручную на наладке (на выполнении меняется через вебсоккет)
 
 $(document).ready(function(){
-  let profile_amount_input = document.querySelectorAll('.task-card-item[data-category="Наладка"]') // При работе без камеры вставить строку document.querySelectorAll('.task-card-item[data-category="Выполняется"], .task-card-item[data-category="Наладка"]')
+  //С камерой - document.querySelectorAll('.task-card-item[data-category="Наладка"]')
+  // Без камеры - document.querySelectorAll('.task-card-item[data-category="Выполняется"], .task-card-item[data-category="Наладка"]')
+  let profile_amount_input = document.querySelectorAll('.task-card-item[data-category="Выполняется"], .task-card-item[data-category="Наладка"]') 
   for (const item in profile_amount_input) {
     if (Object.prototype.hasOwnProperty.call(profile_amount_input, item)) {
       const card_element = profile_amount_input[item];

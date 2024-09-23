@@ -56,8 +56,8 @@
         <div class="person-info">
           <span class="person-info__name">{{user_info.1}} {{user_info.0}}</span>
           <span class="person-info__department">{{user_info.2}}</span>
-          <!-- <span class="person-info__department">{{user_info.3}}</span> -->
-          <span class="person-info__department">{{ request.get_host }}</span>
+          <span class="person-info__department">{{user_info.3}}</span>
+          <!-- <span class="person-info__department">{{ request.get_host }}</span> -->
         </div>
         <div class="logout">
           <a href="{% url 'users:logout' %}" class="logout-link">Выход</a>
@@ -216,7 +216,11 @@
                     </div>
                     <div class="task-information__right-side__current-quantity">
                       <span class="right-side__current-quantity__text">Текущее количество</span>
-                      <input class="right-side__current-quantity__amount" type="number" placeholder="0"></input>
+                      {%if el.task_status_id == 7 or el.task_status_id == 3  %}
+                      <input class="right-side__current-quantity__amount" type="number" value="{{el.profile_amount_now}}"></input>
+                      {%else%}
+                      <input class="right-side__current-quantity__amount" type="number" value="0"></input>
+                      {%endif%}
                     </div>
                   </div>
                 </div>
