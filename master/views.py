@@ -23,7 +23,7 @@ def master_home(request):
   tasks_stat_all = Tasks.objects.all().count()
   tasks_stat_complited = Tasks.objects.filter(task_status=2).count()  
   load_data = {'title': 'AT-Manager', "task_stat": f'{tasks_stat_all}/{tasks_stat_complited}'}
-  print(request.META)
+  # print(request.META)
   
   return render(request, 'master.html', {'load_data': load_data, 'new_task_form':new_task_form,
                                          'edit_task_form': edit_task_form, 'new_paused_form':new_paused_form,

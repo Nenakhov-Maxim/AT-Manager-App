@@ -6,11 +6,13 @@ import numpy as np
 import cv2
 import torch
 from asgiref.sync import sync_to_async
+import asyncio
 
 from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
 from ultralytics import YOLO
 from master.databaseWork import DatabaseWork
 from master.models import *
+from master.models import Tasks
 
 
 
@@ -22,6 +24,7 @@ class VideoConsumer(AsyncWebsocketConsumer):
         self.task_id = -1
         self.max_id_profile = 0
         self.amount_profile = 0
+        
         
 
     async def disconnect(self, close_code):
@@ -89,7 +92,60 @@ class VideoConsumer(AsyncWebsocketConsumer):
         data_task = DatabaseWork({'id_task':self.task_id})    
         result = data_task.change_profile_amount(self.task_id, self.amount_profile)
         print(result)
-      
-      
-      
-  
+
+task_list = []
+
+class TaskTransferConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        await self.accept()  
+        await self.send(text_data=json.dumps({
+            'type': 'Welcome',            
+        }))      
+        self.client = self.scope['client']
+        self.area_id = self.scope['url_route']['kwargs']
+        self.task_list = []
+
+    async def disconnect(self, close_code):
+        pass    
+    
+    async def receive(self, text_data):        
+        data = json.loads(text_data)
+        if data['message'] == "start":         
+            self.task_list = data['task_list']
+            await self.handle() 
+               
+    
+    async def handle(self):
+        global task_list                     
+        while True:
+            await asyncio.sleep(10)
+            db_task = await self.get_all_task()
+            print(db_task)
+            if len(db_task) > 0:
+                for task in db_task: 
+                    print(task)                             
+                    task_list.append(str(task['id']))                    
+                    await self.send(text_data=json.dumps({
+                    'type': 'new_task',
+                    'content': task            
+                    }, default=str))                 
+            # print(task_list) 
+                        
+    @sync_to_async
+    def get_all_task(self):
+        global task_list
+        task_list = self.task_list
+        # print(task_list) 
+        query_task = []
+        tasks = Tasks.objects.all().filter(task_workplace=self.area_id['line_name'], task_status_id__in=[3, 4, 7])  
+        for task in tasks:
+            if str(task.id) not in task_list:
+                content = {'id':task.id, 'name': task.task_name, 'task_status': task.task_status.status_name, 'task_status_id': task.task_status_id, 'task_name': task.task_name,
+                                  'task_profile_type': task.task_profile_type.profile_name, 'task_timedate_start': task.task_timedate_start,
+                                  'task_timedate_end': task.task_timedate_end, 'task_profile_amount': task.task_profile_amount,
+                                  'task_timedate_end_fact': task.task_timedate_end_fact, 'task_time_settingUp': task.task_time_settingUp,
+                                  'task_timedate_start_fact': task.task_timedate_start_fact, 'profile_amount_now': task.profile_amount_now,
+                                  'task_workplace_id': task.task_workplace_id}
+                query_task.append(content)
+                     
+        return query_task 
