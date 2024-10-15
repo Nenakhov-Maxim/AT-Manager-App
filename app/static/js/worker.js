@@ -1,13 +1,13 @@
 //Взаимодействие клиента с сервером по вебсоккету
 
 $(document).ready(function() {
-  let task_id_list = []
+  let task_id_list = {}
   let name_line = document.querySelectorAll(".person-info__department")[1].dataset.line
   let tasks_list = document.querySelectorAll(".task-card-item")
   for (const key in tasks_list) {
     if (Object.prototype.hasOwnProperty.call(tasks_list, key)) {
-      const element = tasks_list[key];
-      task_id_list.push(element.dataset.itemid)      
+      const element = tasks_list[key];      
+      task_id_list[element.dataset.itemid] = element.dataset.categoryId      
     }
   }  
   const socket = new WebSocket(`ws://127.0.0.1:8000/ws/task-transfer/${name_line}`);
@@ -18,9 +18,14 @@ $(document).ready(function() {
   socket.onmessage = function(event) {
     const data = JSON.parse(event.data);
     if (data.type == "Welcome"){
-      alert(`Успешно подключились к серверу AT-Manager. Производственная линия № ${name_line}`)
+      // alert(`Успешно подключились к серверу AT-Manager. Производственная линия № ${name_line}`)
     } else if (data.type == "new_task") {
       ws_add_new_task(data['content'])
+    } else if  (data.type == 'change_task') {
+      alert(`Статус задачи "${data['content']['task_name']}" № ${data['content']['id']} от ${data['content']['task_timedate_start']} изменен на "${data['content']['task_status']}"`)
+      if (data['content']['task_status_id']==5 || data['content']['task_status_id']==6) {
+        document.querySelector(`.task-card-item[data-itemId="${data['content']['id']}"]`).remove()  
+      }
     }
 
   };
@@ -80,6 +85,7 @@ function ws_add_new_task(data){
   div_main.className = "task-card-item"
   div_main.setAttribute('data-itemId', data['id'])
   div_main.setAttribute('data-category', data['task_status'])
+  div_main.setAttribute('data-category-id', data['task_status_id'])
   // task-card-item__wrapper
   let div_wrapper = document.createElement('div');
   div_wrapper.className = "task-card-item__wrapper"
@@ -633,8 +639,7 @@ $(document).ready(function(){
 })
 
 //Функция отправки запросов серверу
-function ajax_request(url, type,  data) {
-  console.log(url)
+function ajax_request(url, type,  data) {  
   $.ajax({
   
     url: url,
@@ -648,8 +653,14 @@ function ajax_request(url, type,  data) {
         "Content-Type": "network/json",        
     },
     
-    success: function(data){ 
-      // location.reload();          
+    success: function(answer){
+
+      console.log(url,data)
+      if (url == 'pause_task/' || url == 'deny_task/') {
+
+      } else
+        location.reload()
+
     },
   
     error: function(){  

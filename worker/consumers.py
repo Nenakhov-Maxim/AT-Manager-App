@@ -111,35 +111,41 @@ class TaskTransferConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):        
         data = json.loads(text_data)
         if data['message'] == "start":         
-            self.task_list = data['task_list']
-            await self.handle() 
-               
+            self.task_list = data['task_list']            
+            await self.check_new_task() 
     
-    async def handle(self):
+    async def check_new_task(self):        
         global task_list                     
         while True:
             await asyncio.sleep(10)
-            db_task = await self.get_all_task()
-            print(db_task)
+            db_task = await self.get_all_task()                        
             if len(db_task) > 0:
-                for task in db_task: 
-                    print(task)                             
-                    task_list.append(str(task['id']))                    
+                print('Нашли задачи') 
+                for task in db_task:                                                
+                    task_list[str(task['id'])] = str(task['task_status_id'])                    
                     await self.send(text_data=json.dumps({
                     'type': 'new_task',
                     'content': task            
-                    }, default=str))                 
+                    }, default=str))
+                      
+            db_task_ch = await self.get_task_with_id()
+            if len(db_task_ch) > 0:
+                for task in db_task_ch:                     
+                    task_list[str(task['id'])] = str(task['task_status_id'])                    
+                    await self.send(text_data=json.dumps({
+                    'type': 'change_task',
+                    'content': task            
+                    }, default=str))               
             # print(task_list) 
                         
     @sync_to_async
     def get_all_task(self):
         global task_list
-        task_list = self.task_list
-        # print(task_list) 
+        task_list = self.task_list        
         query_task = []
-        tasks = Tasks.objects.all().filter(task_workplace=self.area_id['line_name'], task_status_id__in=[3, 4, 7])  
+        tasks = Tasks.objects.all().filter(task_workplace=self.area_id['line_name'], task_status_id__in=[3, 4, 7])         
         for task in tasks:
-            if str(task.id) not in task_list:
+            if str(task.id) not in task_list.keys():
                 content = {'id':task.id, 'name': task.task_name, 'task_status': task.task_status.status_name, 'task_status_id': task.task_status_id, 'task_name': task.task_name,
                                   'task_profile_type': task.task_profile_type.profile_name, 'task_timedate_start': task.task_timedate_start,
                                   'task_timedate_end': task.task_timedate_end, 'task_profile_amount': task.task_profile_amount,
@@ -148,4 +154,23 @@ class TaskTransferConsumer(AsyncWebsocketConsumer):
                                   'task_workplace_id': task.task_workplace_id}
                 query_task.append(content)
                      
-        return query_task 
+        return query_task
+    
+    @sync_to_async
+    def get_task_with_id(self):        
+        global task_list
+        task_list = self.task_list        
+        query_task = []
+        for task_id in task_list.keys():
+            if task_list[task_id] == '3' or task_list[task_id] == '7':                               
+                task = Tasks.objects.get(id=task_id)                   
+                if str(task.task_status_id) != task_list[task_id]:                    
+                    content = {'id':task.id, 'name': task.task_name, 'task_status': task.task_status.status_name, 'task_status_id': task.task_status_id, 'task_name': task.task_name,
+                                        'task_profile_type': task.task_profile_type.profile_name, 'task_timedate_start': task.task_timedate_start,
+                                        'task_timedate_end': task.task_timedate_end, 'task_profile_amount': task.task_profile_amount,
+                                        'task_timedate_end_fact': task.task_timedate_end_fact, 'task_time_settingUp': task.task_time_settingUp,
+                                        'task_timedate_start_fact': task.task_timedate_start_fact, 'profile_amount_now': task.profile_amount_now,
+                                        'task_workplace_id': task.task_workplace_id}
+                    query_task.append(content)
+                     
+        return query_task

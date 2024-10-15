@@ -16,7 +16,7 @@ def worker_home(request, filter='all'):
   new_deny_form = DenyTaskForm()  
   now = datetime.datetime.now()
   area_id = request.user.production_area_id
-  tasks = Tasks.objects.all().filter(task_workplace=area_id, task_status_id__in=[3, 4, 7])
+  tasks = Tasks.objects.all().filter(task_workplace=area_id, task_status_id__in=[3, 4, 7]).order_by('-id')
   task_to_start = tasks.filter(task_status_id=4).count
   task_start= tasks.filter(task_status_id=3).count
   user_info = [request.user.first_name, request.user.last_name, request.user.position, request.user.production_area_id]
