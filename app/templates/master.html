@@ -5,10 +5,11 @@
 <html lang="ru">
 <head>  
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
   <link rel="stylesheet" href="{% static "css/normalize.css" %}">
   <link rel="stylesheet" href="{% static "css/style.css" %}">  
   <link rel="stylesheet" href="{% static "css/master.css" %}">
+  <link rel="stylesheet" href="{% static "css/media-master.css" %}">
   <title>AT-Manager (Мастер)</title>
 </head>
 <body>
@@ -19,8 +20,8 @@
         <div class="header-logo">
           <span class="logo-title">{{load_data.title}}</span>
         </div>
-        <div class="header-menu-wrapper">
-          <ul class="header-menu-list">
+        <div class="header-menu-wrapper" onclick="menu_click()">
+          <ul class="header-menu-list" >
             <li class="header-menu-item">Все задачи</li>
             <li class="header-menu-item">Созданные</li>
             <li class="header-menu-item">Ожидают старта</li>
@@ -166,7 +167,7 @@
               <div class="actions__more-info">
                 <span class="more-info__text">Подробнее</span>
                 <div class="more-info-popup disable">
-                  <span class="close-popup">X</span>
+                  <span class="close-popup" onclick="close_action(this)">X</span>
                   <div id="edit" class="more-info-popup__edit-task" data-itemId={{el.id}}>
                     <a href="#" class="edit-task__link">Редактировать</a>
                   </div>
@@ -184,7 +185,7 @@
               <div class="actions__more-info">
                 <span class="more-info__text">Подробнее</span>
                 <div class="more-info-popup disable">
-                  <span class="close-popup">X</span>                  
+                  <span class="close-popup" onclick="close_action(this)">X</span>                  
                   <div id="pause" class="more-info-popup__start-task" data-itemId={{el.id}}>
                     <a href="#" class="start-task__link">Приостановить</a>
                   </div>                  
@@ -199,7 +200,7 @@
               <div class="actions__more-info">
                 <span class="more-info__text">Подробнее</span>
                 <div class="more-info-popup disable">
-                  <span class="close-popup">X</span>                  
+                  <span class="close-popup" onclick="close_action(this)">X</span>                  
                   <div id="pause" class="more-info-popup__start-task" data-itemId={{el.id}}>
                     <a href="#" class="start-task__link">Приостановить</a>
                   </div>                  
@@ -211,7 +212,7 @@
               <div class="actions__more-info">
                 <span class="more-info__text">Подробнее</span>
                 <div class="more-info-popup disable">
-                  <span class="close-popup">X</span>
+                  <span class="close-popup" onclick="close_action(this)">X</span>
                   <div id="edit" class="more-info-popup__edit-task" data-itemId={{el.id}}>
                     <a href="#" class="edit-task__link">Редактировать</a>
                   </div>
@@ -229,7 +230,7 @@
               <div class="actions__more-info">
                 <span class="more-info__text">Подробнее</span>
                 <div class="more-info-popup disable">
-                  <span class="close-popup">X</span>
+                  <span class="close-popup" onclick="close_action(this)">X</span>
                   <div id="edit" class="more-info-popup__edit-task" data-itemId={{el.id}}>
                     <a href="#" class="edit-task__link">Редактировать</a>
                   </div>
@@ -247,7 +248,7 @@
               <div class="actions__more-info">
                 <span class="more-info__text">Подробнее</span>
                 <div class="more-info-popup disable">
-                  <span class="close-popup">X</span>
+                  <span class="close-popup" onclick="close_action(this)">X</span>
                   <div id="hide" class="more-info-popup__hide-task" data-itemId={{el.id}}>
                     <a href="#" class="hide-task__link">Скрыть</a>
                   </div>                  
@@ -259,7 +260,7 @@
               <div class="actions__more-info">
                 <span class="more-info__text">Подробнее</span>
                 <div class="more-info-popup disable">
-                  <span class="close-popup">X</span>                  
+                  <span class="close-popup" onclick="close_action(this)">X</span>                  
                   <div id="pause" class="more-info-popup__start-task" data-itemId={{el.id}}>
                     <a href="#" class="start-task__link">Приостановить</a>
                   </div>                  

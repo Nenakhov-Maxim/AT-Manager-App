@@ -30,12 +30,28 @@
 }
 
 .header-menu-list {
+  position: relative;
   display: flex;
   flex-wrap: nowrap;
   flex-direction: row;
   padding: 0;
   list-style: none;
   margin: 30px 0 15px 0;
+}
+
+.header-menu-wrapper::after  {
+  cursor: pointer;
+  display: none;
+  position: absolute;
+  content: '';
+  background-image: url('../img/menu.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 20px;
+  height: 20px;
+  left: 15px;
+  top: 40px;  
 }
 
 .header-menu-item {
@@ -99,7 +115,7 @@
   justify-content: space-between;
   padding-left: 15px;
   padding-right: 15px;
-  padding-top: 15px;
+  align-items: center;
   margin-bottom: 10px;
 }
 
@@ -194,6 +210,7 @@
   background-color: black;
   border-bottom: 1px solid #333;
   align-items: center;
+  height: 30px;
 }
 
 .task-cards-list {
@@ -431,7 +448,7 @@
   border-bottom: 1px dashed #C21500
 }
 
-.more-info__text::after {
+.actions__more-info::after {
   position: absolute;
   content: '';
   background-image: url('../img/More.svg');
@@ -440,8 +457,8 @@
   background-size: cover;
   width: 25px;
   height: 25px;
-  top: 0;
-  right: -80px;
+  top: 42px;
+  right: -5px;
   cursor: pointer;
 }
 
@@ -710,6 +727,7 @@
   display: flex;
   flex-wrap: nowrap;
   flex-direction: row;
+  align-items: center;
 }
 
 .position-in-list__title-block  {  
@@ -747,6 +765,7 @@
   z-index: 100;
   top: 0;
   left: 0;
+  overflow: auto;
 }
 
 .edit-task-popup {
@@ -760,6 +779,7 @@
   z-index: 100;
   top: 0;
   left: 0;
+  
 }
 
 .new-task-popup-wrapper {
@@ -768,6 +788,12 @@
   width:1000px;  
   z-index:2;  
   background-color: white;
+  overflow: auto; 
+  top: 0;
+  margin-bottom: 10px;
+  margin-top: 10px;  
+  top: 0; 
+  position: sticky;
 }
 
 .edit-task-popup-wrapper {
@@ -793,7 +819,7 @@
   padding: 20px 15px 20px 15px;
   color: white;
   background-color: black;
-  font-size: 18px;
+  font-size: 18px;  
 }
 
 .edit-task-popup__title-block {

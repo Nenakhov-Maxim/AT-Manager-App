@@ -28,17 +28,16 @@ for (const key in cards_task) {
   if (Object.prototype.hasOwnProperty.call(cards_task, key)) {
     const card_item = cards_task[key];
     let id_task = card_item.dataset.itemid    
-    card_item.querySelector('.more-info__text').addEventListener('click', () => open_actions(card_item))
+    card_item.querySelector('.more-info__text, .actions__more-info').addEventListener('click', () => open_actions(card_item))
   }
 }
 //Скрытие опций при клике в любом другом месте
-document.addEventListener('mouseup', function (e) {
-  
+document.addEventListener('mouseup', function (e) {   
   let popup_action = document.querySelectorAll('.more-info-popup');
   for (const key in popup_action) {
     if (Object.prototype.hasOwnProperty.call(popup_action, key)) {
-      const element = popup_action[key];      
-      if (e.target.closest(".more-info-popup")) return;
+      const element = popup_action[key];           
+      if (e.target.closest(".more-info-popup") && (e.target.classList != 'close-popup')) return;
       element.classList.add("disable");
     }
   }  
@@ -47,19 +46,18 @@ document.addEventListener('mouseup', function (e) {
 
 function open_actions(card_item) {
   let popup_action = card_item.querySelector('.more-info-popup')
-  let close_button = card_item.querySelector('.close-popup')  
+  let close_button = card_item.querySelector('.close-popup')
+   
 
   if (popup_action.classList.contains('disable')) {
     popup_action.classList.remove('disable')
   } else {
     popup_action.classList.add('disable')
-  }
-
-  close_button.addEventListener('click', ()=>close_action(popup_action))
+  } 
 };
 
-function close_action(popup) {
-  popup.classList.add('disable')
+function close_action(e) {  
+  e.closest('.more-info-popup').classList.toggle('disable')   
 }
 
 
@@ -430,3 +428,23 @@ function left_in_page() {
   } 
 }
 
+function menu_click () {
+  const screenWidth = window.screen.width
+  if (screenWidth <= 800) {
+    if (document.querySelector('.header-menu-list').style.display == 'flex') {
+      document.querySelector('.header-menu-list').style.display = 'none'
+      // document.querySelector('.header-menu-wrapper::after').style.display = 'block' 
+    } else {
+      document.querySelector('.header-menu-list').style.display = 'flex'
+      // document.querySelector('.header-menu-wrapper::after').style.display = 'none'
+    }
+    
+  }
+}
+
+document.addEventListener("resize", (event) => {
+  const screenWidth = window.screen.width
+  if (screenWidth > 800)  {
+    document.querySelector('.header-menu-list').style.display = 'flex'
+  }
+});
