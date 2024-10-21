@@ -222,9 +222,9 @@
                     <div class="task-information__right-side__current-quantity">
                       <span class="right-side__current-quantity__text">Текущее количество</span>
                       {%if el.task_status_id == 7 or el.task_status_id == 3  %}
-                      <input class="right-side__current-quantity__amount" type="number" value="{{el.profile_amount_now}}"></input>
+                      <input class="right-side__current-quantity__amount" type="number" defaultValue="{{el.profile_amount_now}}"></input>
                       {%else%}
-                      <input class="right-side__current-quantity__amount" type="number" value="0"></input>
+                      <input class="right-side__current-quantity__amount" type="number" defaultValue="0"></input>
                       {%endif%}
                     </div>
                   </div>

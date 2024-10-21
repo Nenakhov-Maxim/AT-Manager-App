@@ -618,19 +618,20 @@ function videoStream(task_id){
 $(document).ready(function(){
   //С камерой - document.querySelectorAll('.task-card-item[data-category="Наладка"]')
   // Без камеры - document.querySelectorAll('.task-card-item[data-category="Выполняется"], .task-card-item[data-category="Наладка"]')
-  let profile_amount_input = document.querySelectorAll('.task-card-item[data-category="Наладка"]')     
+  let profile_amount_input = document.querySelectorAll('.task-card-item[data-category="Выполняется"], .task-card-item[data-category="Наладка"]')
   for (const item in profile_amount_input) {
     if (Object.prototype.hasOwnProperty.call(profile_amount_input, item)) {
       const card_element = profile_amount_input[item];
-      let id_task = card_element.dataset.itemid           
+      let id_task = card_element.dataset.itemid                
       input_element = card_element.querySelector('.right-side__current-quantity__amount')            
-      input_element.addEventListener('keypress', function(e){
+      input_element.addEventListener('keypress', function(e){        
         var key = e.which;
-        if(key == 13)  {input_element.blur()}
-      })
-      input_element.addEventListener('blur', () =>{
+        if(key == 13)  {
+          e.target.blur()}})
+      input_element.addEventListener('blur', (e) =>{
+        
         let link = 'edit-profile-amount-value/'
-        let data = {'id_task': id_task, 'value':input_element.value}
+        let data = {'id_task': id_task, 'value':e.target.value}
         let type_request = 'GET'         
         ajax_request(link, type_request, data)        
       })
@@ -640,6 +641,7 @@ $(document).ready(function(){
 
 //Функция отправки запросов серверу
 function ajax_request(url, type,  data) {  
+  console.log(url)
   $.ajax({
   
     url: url,
@@ -655,8 +657,8 @@ function ajax_request(url, type,  data) {
     
     success: function(answer){
 
-      console.log(url,data)
-      if (url == 'pause_task/' || url == 'deny_task/') {
+      // console.log(url,data)
+      if (url == 'pause_task/' || url == 'deny_task/' || url == 'edit-profile-amount-value/') {
 
       } else
         location.reload()

@@ -7,6 +7,8 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.generic import UpdateView
 from django.urls import reverse_lazy
+from .report import create_excel_from_dict_list
+import math, datetime, os
 
 
 
@@ -82,7 +84,7 @@ def new_task(request):
           return HttpResponse(f'Ошибка: {new_task_file}')
       else:        
         return HttpResponse(f'Ошибка: {new_history_file}')   
-\
+
 # Удаление задачи    
 @login_required
 @permission_required(perm='master.change_tasks', raise_exception=True)  
@@ -149,11 +151,53 @@ def new_report(request):
       start_date = data['date_start']
       end_date = data['date_end']
       tasks = Tasks.objects.all().filter(task_timedate_end_fact__range=(start_date, end_date))
+      dict_list = []
       for task in tasks:
-        print(task.task_name)
-      return redirect('/master', permanent=True)
+        total_length = round(float(task.task_profile_length) * int(task.task_profile_amount), 2) 
+        total_time = dates_to_time(task.task_timedate_start_fact, task.task_timedate_end_fact)
+        new_row = {'Ф.И.О': task.worker_accepted_task, 'Номер линии': task.task_workplace_id, 'Марка изделия': task.task_profile_type.profile_name, 'Общее кол-во п/м': total_length,
+                                                       'Отработанные часы':total_time, 'Ср. ед.':'0', 'Хоз. работы':'Да', 'Подпись работника':''}
+        dict_list.append(new_row)
+        
+      answer = create_excel_from_dict_list(dict_list, f'Акт от {datetime.date.today()}.xlsx')
+      link = f'/app/{answer}'
+      link = link.replace('\\', '/')      
+      return FileResponse(open(os.path.join(answer), "rb"))
     else:
       return redirect('/master', permanent=True)
   
   else:
     return HttpResponse('Только GET-запрос')  
+
+
+def dates_to_time(date1, date2):
+  hourse_string = '0'
+  minutes_string = '0'
+  seconds_string = '0'
+  result_time = date2 - date1  
+  sum_difference = math.modf(result_time.total_seconds() / 60 / 60)
+  hours = int(sum_difference[1])
+  if abs(hours)  < 10:
+    if hours < 0:
+      hourse_string = f'-0{abs(hours)}'
+    else:
+      hourse_string = f'0{hours}'
+  else:
+      hourse_string = f'{hours}'  
+  
+     
+       
+  minutes_sum = math.modf(sum_difference[0] * 60)
+  minutes = abs(int(minutes_sum[1]))
+  if minutes  < 10:
+    minutes_string = f'0{minutes}'
+  else:
+    minutes_string = f'{minutes}'    
+  seconds = abs(int(minutes_sum[0] * 60) ) 
+  print(seconds)
+  if seconds  < 10:
+    seconds_string = f'0{seconds}'
+  else:
+    seconds_string = f'{seconds}'     
+    
+  return f'{hourse_string}:{minutes_string}:{seconds_string}'

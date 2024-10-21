@@ -28,7 +28,7 @@ def create_excel_from_dict_list(dict_list: list, output_filename: str, sheet_nam
     ws = wb.active
     ws.title = sheet_name
     
-    ws.append(['Дата', '__________', '', '', 'Профильная линия', '', '', 'Смена', '___________'])
+    ws.append(['Дата', '__________', '', 'Профильная линия', '', '', 'Смена', '___________' ])
     ws.append([])
 
     # Записываем данные из списка словарей в Excel
@@ -94,6 +94,3 @@ def create_tabel_users():
                                                       {'Ф.И.О': 'Рабочий 2', 'Номер линии': '1', 'Марка изделия':'Т-профиль', 'Общее кол-во п/м':'2800',
                                                        'Отработанные часы':'7', 'Ср. ед.':'0', 'Хоз. работы':'Да', 'Подпись работника':''}], output_filename='Акт №1.xlsx')
     print(filepath)
-
-if __name__ == "__main__":
-  create_tabel_users()
