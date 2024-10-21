@@ -14,9 +14,8 @@ import math, datetime, os
 
 
 
-
-@permission_required(perm='master.view_tasks', raise_exception=True)
 @login_required
+@permission_required(perm='master.view_tasks', raise_exception=True)
 def master_home(request):
   new_task_form = NewTaskForm()
   edit_task_form = EditTaskForm()
@@ -32,8 +31,8 @@ def master_home(request):
                                          'edit_task_form': edit_task_form, 'new_paused_form':new_paused_form,
                                          'tasks': tasks, 'report_form': report_form})
 
-@permission_required(perm='master.change_tasks', raise_exception=True)
 @login_required()
+@permission_required(perm='master.change_tasks', raise_exception=True)
 def start_task(request):    
   if request.method == 'GET':
     data_task = DatabaseWork({'id_task':request.GET.get('id_task')})
@@ -47,9 +46,9 @@ def start_task(request):
   else:
     return HttpResponse('Только GET-запрос')
 
-# Приостановка выполнения задания  
-@permission_required(perm='master.change_tasks', raise_exception=True)  
-@login_required
+# Приостановка выполнения задания 
+@login_required 
+@permission_required(perm='master.change_tasks', raise_exception=True)
 def pause_task(request, id_task):   
   if request.method == 'POST':    
     new_paused_form = PauseTaskForm(request.POST)    
@@ -65,8 +64,8 @@ def pause_task(request, id_task):
         return HttpResponse(f'Ошибка: {new_task_file}')
    
 # Добавление новой задачи
-@permission_required(perm='master.add_tasks', raise_exception=True)
 @login_required
+@permission_required(perm='master.add_tasks', raise_exception=True)
 def new_task(request):
   if request.method == 'POST':    
     new_task_form = NewTaskForm(request.POST)    
