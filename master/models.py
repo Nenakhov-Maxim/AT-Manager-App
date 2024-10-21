@@ -68,6 +68,7 @@ class Tasks(models.Model):
   task_time_settingUp = models.DateTimeField('Фактическая дата и время начала наладки', null=True, blank=True)
   profile_amount_now = models.BigIntegerField('Количество профиля текущего', default=0)
   task_profile_length = models.FloatField('Длина профиля',  default=0)
+  worker_accepted_task = models.TextField('ФИО рабочего', blank=True)
   
   def __str__(self):
     return self.task_name

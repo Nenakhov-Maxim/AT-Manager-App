@@ -171,7 +171,8 @@ class DatabaseWork:
       try:
         number = Tasks.objects.filter(id=id_task).update(        
         task_timedate_start_fact = self.now,
-        task_status_id = 3     
+        task_status_id = 3,
+        worker_accepted_task = user_name     
       )
         # number - количество обновленных строк
         return  True

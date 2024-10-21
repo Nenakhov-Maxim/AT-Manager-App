@@ -61,6 +61,7 @@
       </div>
       <div class="toolbars__sub_tasks">
         <a href="{% url 'analytics:analitytics-home' %}"><img src="{% static "img/analytics.svg" %}" alt="Аналитика"><span>Аналитика</span></a>
+        <a href="#"><img src="{% static "img/report.svg" %}" alt="Сформировать акт выполненных работ" onclick="action_report_popup(this)"><span>АКТ</span></a>
       </div>
       <div class="toolbars__new-task">
         <input type="button" class="new-task-button" value="НОВОЕ ЗАДАНИЕ">
@@ -423,7 +424,26 @@
         </div>        
       </form>
     <div class="overlay"></div>
-  </div>      
+  </div>
+  <div class="new_report_popup disable">      
+    <form class="new_report_form" method="POST" action="/master/new_report/">
+      {% csrf_token %}          
+      <h3 class="new_report_form__title">AT-Manager</h3>
+      <div class="new_report__catproblem_block">
+        <span class="new_report__cat-problem__title">Выберете начало периода отчета</span>
+        {{ report_form.date_start }}          
+      </div>
+      <div class="new_report__catproblem_block">
+        <span class="new_report__cat-problem__title">Выберете окончание периода отчета</span>
+        {{ report_form.date_end }}          
+      </div>       
+      <div class="new_report__button_block">
+        <button class="new_report_accept-button" type="submit" name="new_report_button_accept">Отправить</button>
+        <button class="new_report_cansel-button" type="button" name="new_report_button_cansel">Отменить</button>
+      </div>        
+    </form>
+  <div class="overlay"></div>
+</div>       
   </div>
 </section>
 <footer class="footer">

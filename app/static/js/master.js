@@ -448,3 +448,13 @@ document.addEventListener("resize", (event) => {
     document.querySelector('.header-menu-list').style.display = 'flex'
   }
 });
+
+// Открытие и закрытие модального окна нового отчета
+function action_report_popup(e) {
+  document.querySelector('.new_report_popup').classList.toggle('disable')
+  document.querySelector('.new_report_cansel-button').addEventListener('click', ()=>{
+    document.querySelector('.new_report_popup').classList.add('disable')
+  })
+}
+
+

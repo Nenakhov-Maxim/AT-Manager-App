@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from .models import Tasks
-from .forms import NewTaskForm, EditTaskForm, PauseTaskForm
+from .forms import NewTaskForm, EditTaskForm, PauseTaskForm, ReportForm
 from .databaseWork import DatabaseWork
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, FileResponse
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.generic import UpdateView
@@ -18,7 +18,8 @@ from django.urls import reverse_lazy
 def master_home(request):
   new_task_form = NewTaskForm()
   edit_task_form = EditTaskForm()
-  new_paused_form = PauseTaskForm()  
+  new_paused_form = PauseTaskForm()
+  report_form = ReportForm()
   tasks = Tasks.objects.all().filter(task_is_vision=True).order_by('-id')    
   tasks_stat_all = Tasks.objects.all().count()
   tasks_stat_complited = Tasks.objects.filter(task_status=2).count()  
@@ -27,7 +28,7 @@ def master_home(request):
   
   return render(request, 'master.html', {'load_data': load_data, 'new_task_form':new_task_form,
                                          'edit_task_form': edit_task_form, 'new_paused_form':new_paused_form,
-                                         'tasks': tasks})
+                                         'tasks': tasks, 'report_form': report_form})
 
 @permission_required(perm='master.change_tasks', raise_exception=True)
 @login_required()
@@ -137,3 +138,22 @@ def hide_task(request):
   else:
     return HttpResponse('Только GET-запрос')
 
+
+@login_required
+@permission_required(perm='master.change_tasks', raise_exception=True)
+def new_report(request):
+  if request.method == 'POST':
+    report_form = ReportForm(request.POST)
+    if report_form.is_valid():
+      data = report_form.cleaned_data
+      start_date = data['date_start']
+      end_date = data['date_end']
+      tasks = Tasks.objects.all().filter(task_timedate_end_fact__range=(start_date, end_date))
+      for task in tasks:
+        print(task.task_name)
+      return redirect('/master', permanent=True)
+    else:
+      return redirect('/master', permanent=True)
+  
+  else:
+    return HttpResponse('Только GET-запрос')  

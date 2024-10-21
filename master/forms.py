@@ -50,3 +50,12 @@ class PauseTaskForm(forms.Form):
     
 class LoginForm(AuthenticationForm):
     pass
+
+class ReportForm(forms.Form):
+    date_start = forms.DateTimeField(widget=DateTimeInput(format="%Y-%m-%d %H:%M",
+                                                      attrs={'type': 'datetime-local',
+                                                            "class":"popup-content-block__time-to-end__input"}))
+    date_end = forms.DateTimeField(widget=DateTimeInput(format="%Y-%m-%d %H:%M",
+                                                      attrs={'type': 'datetime-local',
+                                                            "class":"popup-content-block__time-to-end__input"}))
+   

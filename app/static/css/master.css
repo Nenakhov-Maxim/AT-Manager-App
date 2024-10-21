@@ -1033,6 +1033,18 @@ input[name="cansel-popup"] {
   top: 0;
   left: 0;
 }
+.new_report_popup {
+  position: fixed;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,.75);
+  z-index: 100;
+  top: 0;
+  left: 0; 
+}
 
 .deny_task_popup {
   position: fixed;
@@ -1058,6 +1070,17 @@ input[name="cansel-popup"] {
   grid-row-gap: 15px;
   padding: 0 50px;
 }
+.new_report_form  {
+  display: grid;
+  grid-template-rows: 0.5fr 0.5fr 3fr 1.5fr;   
+  z-index:3;  
+  background-color: white;
+  justify-content: center;
+  color: white;
+  background-color: black;
+  grid-row-gap: 15px;
+  padding: 0 50px; 
+}
 
 .pause_task_popup__catproblem_block {
   display: flex;
@@ -1065,17 +1088,41 @@ input[name="cansel-popup"] {
   flex-direction: column;
 }
 
+.new_report__catproblem_block  {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column; 
+}
+
 .pause_task_popup__comments_block  {
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;
+}
+.new_report__comments_block {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column; 
 }
 
 .pause_task_popup__comment  {
   height: 100%;
 }
 
+
 .pause_task_popup_form select {
+  width: 250px;
+  color: #333;
+  height: 30px;
+  font-size: 12px;
+  padding: 2px 10px 2px 15px;
+  border-radius: 15px;
+  border: 1px solid #333;
+  background-color: white;
+  cursor: pointer;
+}
+
+.new_report_form select  {
   width: 250px;
   color: #333;
   height: 30px;
@@ -1108,6 +1155,27 @@ button[name="pause_task_popup_button_cansel"] {
   cursor: pointer;
 }
 
+button[name="new_report_button_accept"] {
+  width: 250px;
+  height: 50px;
+  margin-bottom: 15px;
+  background-color: #C21500;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button[name="new_report_button_cansel"] {
+  width: 250px;
+  height: 50px; 
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
 .pause_task_popup__cat-problem__title {
   margin-bottom: 10px;
 }
@@ -1124,6 +1192,16 @@ button[name="pause_task_popup_button_cansel"] {
   border: none;
 }
 
+.toolbars__sub_tasks {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+}
+.toolbars__sub_tasks a {
+  margin-right: calc(10px + (10 - 5) * (100vw - 1600px) / (1600 - 600)); 
+}
 
 /*OnOff стили*/
 
