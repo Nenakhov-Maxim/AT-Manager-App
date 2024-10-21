@@ -45,8 +45,18 @@
   flex-direction: column;
   text-align: center;
 }
+.task-information__right-side__required-length {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  text-align: center;
+}
 
 .right-side__required-quantity__amount {
+  font-size: 24px;
+  color: #C21500;
+}
+.right-side__required-length__amount {
   font-size: 24px;
   color: #C21500;
 }

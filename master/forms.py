@@ -18,6 +18,7 @@ class NewTaskForm(forms.Form):
     task_profile_type = forms.ModelChoiceField(queryset=Profile_type.objects.all())
     task_workplace =  forms.ModelChoiceField(queryset=Workplace.objects.all())
     task_profile_amount = forms.IntegerField()
+    task_profile_length = forms.FloatField()
     task_comments = forms.CharField(widget=forms.Textarea(attrs={"class":"new-task-popup-comments__input", 'style':'resize:none;'}))
     
     class Meta:
@@ -37,6 +38,7 @@ class EditTaskForm(forms.Form):
     task_profile_type = forms.ModelChoiceField(queryset=Profile_type.objects.all())
     task_workplace =  forms.ModelChoiceField(queryset=Workplace.objects.all())
     task_profile_amount = forms.IntegerField()
+    task_profile_length = forms.FloatField()
     task_comments = forms.CharField(widget=forms.Textarea(attrs={"class":"new-task-popup-comments__input", 'style':'resize:none;'}))
     
     class Meta:

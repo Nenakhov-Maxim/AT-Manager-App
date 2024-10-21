@@ -25,7 +25,8 @@ class DatabaseWork:
         task_comments = self.data['task_comments'],
         task_status_id = 1,
         task_user_created = user_name,
-        task_history_id = self.history_id
+        task_history_id = self.history_id,
+        task_profile_length = self.data['task_profile_length']
         )
       self.new_task_id = new_task.id
       return True

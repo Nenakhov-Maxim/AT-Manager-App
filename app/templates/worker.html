@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="{% static "css/style.css" %}">  
   <link rel="stylesheet" href="{% static "css/master.css" %}">
   <link rel="stylesheet" href="{% static "css/worker.css" %}">
+  <link rel="stylesheet" href="{% static "css/media-worker.css" %}"> 
   <title>AT-Manager (Рабочий)</title>
 </head>
 <body>
@@ -210,6 +211,10 @@
                     {% endif %}
                   </div>
                   <div class="task-information__right-side">
+                    <div class="task-information__right-side__required-length">
+                      <span class="right-side__required-length__text">Длина профиля</span>
+                      <span class="right-side__required-length__amount">{{ el.task_profile_length }}</span>
+                    </div>
                     <div class="task-information__right-side__required-quantity">
                       <span class="right-side__required-quantity__text">Необходимое количество</span>
                       <span class="right-side__required-quantity__amount">{{ el.task_profile_amount }}</span>
