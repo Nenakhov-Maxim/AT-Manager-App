@@ -152,11 +152,19 @@ def new_report(request):
       tasks = Tasks.objects.all().filter(task_timedate_end_fact__range=(start_date, end_date))
       dict_list = []
       for task in tasks:
-        total_length = round(float(task.task_profile_length) * int(task.task_profile_amount), 2) 
-        total_time = dates_to_time(task.task_timedate_start_fact, task.task_timedate_end_fact)
-        new_row = {'Ф.И.О': task.worker_accepted_task, 'Номер линии': task.task_workplace_id, 'Марка изделия': task.task_profile_type.profile_name, 'Общее кол-во п/м': total_length,
-                                                       'Отработанные часы':total_time, 'Ср. ед.':'0', 'Хоз. работы':'Да', 'Подпись работника':''}
-        dict_list.append(new_row)
+        profile_index = 0
+        my_str = task.worker_accepted_task
+        arr_str = my_str.split(', ')
+        for value in arr_str:
+          start_i = value.find('(')
+          end_i = value.find(')')         
+          int_data = int(value[start_i + 1:end_i])
+          profile_index = profile_index + int_data
+          total_length = round(float(task.task_profile_length) * int(int_data), 2) 
+          total_time = dates_to_time(task.task_timedate_start_fact, task.task_timedate_end_fact)         
+          new_row = {'Ф.И.О': value[0:start_i], 'Номер линии': task.task_workplace_id, 'Марка изделия': task.task_profile_type.profile_name, 'Общее кол-во п/м': total_length,
+                                                        'Отработанные часы':total_time, 'Ср. ед.':'0', 'Хоз. работы':'Да', 'Подпись работника':''}
+          dict_list.append(new_row)
         
       answer = create_excel_from_dict_list(dict_list, f'Акт от {datetime.date.today()}.xlsx')
       link = f'/app/{answer}'
@@ -192,8 +200,7 @@ def dates_to_time(date1, date2):
     minutes_string = f'0{minutes}'
   else:
     minutes_string = f'{minutes}'    
-  seconds = abs(int(minutes_sum[0] * 60) ) 
-  print(seconds)
+  seconds = abs(int(minutes_sum[0] * 60) )   
   if seconds  < 10:
     seconds_string = f'0{seconds}'
   else:

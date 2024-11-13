@@ -240,9 +240,27 @@ class DatabaseWork:
     
     if history_check[0] ==  True:      
       try:
+         # Кашапов Салават(55), Кашапов Салават(0), Кашапов Салават(55), Кашапов Салават(351)
+        total_profile_amout = task.task_profile_amount
+        profile_index = 0
+        my_str = task.worker_accepted_task
+        arr_str = my_str.split(', ')
+        worker_now = ''
+        for value in arr_str:
+          start_i = value.find('(')
+          end_i = value.find(')')
+          try:
+            int_data = int(value[start_i + 1:end_i])
+            profile_index = profile_index + int_data           
+          except Exception as e:
+            int_data = total_profile_amout - profile_index
+            worker_now = task.worker_accepted_task + f'({int_data})'
+            # print(f'{value[0:start_i]} изготовил {int_data} ед. профиля')
+          
+        task.worker_accepted_task = worker_now
         task.task_status_id = 2
         task.task_timedate_end_fact = self.now
-        task.save(update_fields=['task_status_id', 'task_timedate_end_fact'])
+        task.save(update_fields=['task_status_id', 'task_timedate_end_fact', 'worker_accepted_task'])
         return  True
       except Exception as e:
         return f'Ошибка завершения задачи: {e}'
@@ -387,9 +405,20 @@ class DatabaseWork:
  
  # Пересменка
   def shiftChange(self, id_task, profile_amount):
-    task = Tasks.objects.get(id= id_task)  
-    worker_now = task.worker_accepted_task
-    worker_now = worker_now + f'({profile_amount})'
+    task = Tasks.objects.get(id= id_task)       
+    profile_index = 0
+    my_str = task.worker_accepted_task
+    arr_str = my_str.split(', ')
+    worker_now = ''
+    for value in arr_str:      
+      start_i = value.find('(')
+      end_i = value.find(')')
+      try:
+        int_data = int(value[start_i + 1:end_i])
+        profile_index = profile_index + int_data           
+      except Exception as e:
+        int_data = int(profile_amount) - int(profile_index)        
+        worker_now = task.worker_accepted_task + f'({int_data})'        
     history_task = Task_history.objects.get(id=task.task_history_id)
     new_event = history_task.history_name
     max_key = max(new_event, key=new_event.get)
