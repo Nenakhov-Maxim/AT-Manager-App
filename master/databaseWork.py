@@ -167,12 +167,17 @@ class DatabaseWork:
     except Exception as e:
       history_check = [False, f'Ошибка изменения истории: {e}']
     #  пробуем изменить статус и фактическое время начала задачи     
-    if history_check[0] ==  True:      
+    if history_check[0] ==  True:
+      worker_now = task.worker_accepted_task
+      if len(worker_now) > 0:
+          worker_now = worker_now + ', ' + user_name
+      else:
+          worker_now = user_name
       try:
         number = Tasks.objects.filter(id=id_task).update(        
         task_timedate_start_fact = self.now,
         task_status_id = 3,
-        worker_accepted_task = user_name     
+        worker_accepted_task = worker_now     
       )
         # number - количество обновленных строк
         return  True
@@ -368,6 +373,8 @@ class DatabaseWork:
       Users_analytics.objects.create(userId_id=user_id, settingUp={string_date_key:new_task_time_settingUp},
                                      profile_amount={string_date_key:new_task_profile_amount},
                                      work_time ={string_date_key:new_task_woktime})   
+ 
+  # Изменение профиля
   def change_profile_amount(self, id_task, value):
     task = Tasks.objects.get(id=id_task)
     try:
@@ -377,8 +384,33 @@ class DatabaseWork:
     except Exception as e:
       print(f'Ошибка изменения текущего количества профиля в задаче: {e}') 
       return False 
+ 
+ # Пересменка
+  def shiftChange(self, id_task, profile_amount):
+    task = Tasks.objects.get(id= id_task)  
+    worker_now = task.worker_accepted_task
+    worker_now = worker_now + f'({profile_amount})'
+    history_task = Task_history.objects.get(id=task.task_history_id)
+    new_event = history_task.history_name
+    max_key = max(new_event, key=new_event.get)
+    new_event[int(max_key) + 1] = f"{self.now};Для задачи № {id_task} выполняется пересменка; Фактическое время приостановки - {self.now}"
+    history_check = [False, '']
+    try:
+      history_task.history_name = new_event
+      history_task.save(update_fields=['history_name'])
+      history_check = [True, '']            
+    except Exception as e:
+      history_check = [False, f'Ошибка изменения истории: {e}']    
     
-    
+    if history_check[0] ==  True:      
+      try:
+        task.worker_accepted_task = worker_now
+        task.task_status_id = 8
+        task.save(update_fields=['worker_accepted_task', 'task_status_id'])
+        return True
+      except Exception as e:
+        print(f'Ошибка при выполнении пересменки: {e}') 
+        return False
     
     
        

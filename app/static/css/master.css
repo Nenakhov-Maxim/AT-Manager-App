@@ -433,6 +433,22 @@
   border-radius: 100%;
 }
 
+.shiftChange {
+  background-color: #8a732b;
+  color: #64540b;
+}
+
+.shiftChange::before {
+  position: absolute;
+  content: '';
+  width: 10px;
+  height: 10px;
+  background-color: #413606;
+  left: 14px;
+  top: 8px;
+  border-radius: 100%;
+}
+
 .task-status__text {
   font-size: 12px;
 }

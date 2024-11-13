@@ -23,5 +23,7 @@ urlpatterns = [
     path('deny_task/', views.deny_task, name='deny_working'),
     path('complete_task/', views.complete_task, name='complete_working'),
     path('setting-up/', views.start_settingUp, name='settingUp'),
-    path('edit-profile-amount-value/', views.edit_profile_amount, name='change_profile_amount'),    
+    path('edit-profile-amount-value/', views.edit_profile_amount, name='change_profile_amount'),
+    path('shiftChange/', views.shiftChange, name='change_worker'),
+        
 ]

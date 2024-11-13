@@ -14,6 +14,7 @@
 .event-leftside__task-information {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  margin-bottom: 60px;
 }
 
 .task-information__left-side {
@@ -82,6 +83,7 @@
   flex-direction: row;
   justify-content: center;
   margin-bottom: 15px;
+  padding-right: 10px;
 }
 
 .event-leftside__buttons input {
@@ -104,6 +106,14 @@
 
 .event-leftside__button-stop__inner input {
   background-color: #C21500;
+}
+
+.event-leftside__button-shiftСhange__inner input {
+  background-color: #0e0280; 
+} 
+
+.event-leftside__button-pause {
+  margin-right: 20px;
 }
 
 .task-card__more-information__wrapper {

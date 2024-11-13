@@ -549,6 +549,19 @@ function complete_task(e) {
   } else {ajax_request(link, type_request, data)}
 }
 
+//Пересменка
+function shiftChange(e) {
+  let task = e.closest(".task-card-item");  ;    
+  let id_task = task.dataset.itemid;
+  let main_block_task = $(`.task-card-item[data-itemid=${id_task}]`)[0]
+  let fact_profile_amount = main_block_task.querySelector('.right-side__current-quantity__amount').value
+  let link = 'shiftChange/'
+  let data = {'id_task': id_task, 'profile_amount': Number(fact_profile_amount)}
+  let type_request = 'GET'
+  clearInterval(interval);
+  ajax_request(link, type_request, data)
+}
+
 // Передача видео через websocket (Необходимо раскомментить, как только подключу камеру!)
 
 // $(document).ready(function() {
@@ -700,6 +713,7 @@ function ajax_request(url, type,  data) {
       if (url == 'pause_task/' || url == 'deny_task/' || url == 'edit-profile-amount-value/') {
 
       } else
+        console.log(answer)
         location.reload()
 
     },

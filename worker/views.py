@@ -16,7 +16,7 @@ def worker_home(request, filter='all'):
   new_deny_form = DenyTaskForm()  
   now = datetime.datetime.now()
   area_id = request.user.production_area_id
-  tasks = Tasks.objects.all().filter(task_workplace=area_id, task_status_id__in=[3, 4, 7]).order_by('-id')
+  tasks = Tasks.objects.all().filter(task_workplace=area_id, task_status_id__in=[3, 4, 7, 8]).order_by('-id')
   task_to_start = tasks.filter(task_status_id=4).count
   task_start= tasks.filter(task_status_id=3).count
   user_info = [request.user.first_name, request.user.last_name, request.user.position, request.user.production_area_id]
@@ -156,3 +156,12 @@ def edit_profile_amount(request):
     return JsonResponse({'answer':'ОК'})
   else:
     return JsonResponse({'answer':'Error'})
+  
+@login_required
+@permission_required(perm='worker.change_workertypeproblem', raise_exception=True)
+def shiftChange(request):  
+  task_id = request.GET.get('id_task')
+  profile_amount = request.GET.get('profile_amount')
+  data_task = DatabaseWork({'id_task':task_id})
+  result = data_task.shiftChange(task_id, profile_amount)
+  return JsonResponse({'answer':'ОК'})

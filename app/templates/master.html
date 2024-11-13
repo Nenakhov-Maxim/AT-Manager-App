@@ -155,9 +155,16 @@
               </div>             
               <span class="task-status__text">Наладка оборудования. Старт: {{el.task_time_settingUp}}</span>
             </div>
+            {% elif el.task_status_id == 8 %}
+            <div class="card-item__task-status">
+              <div class="task-status-widget">              
+                <span class="task-status-widget__text shiftChange">{{el.task_status}}</span>
+              </div>             
+              <span class="task-status__text">Ожидание пересменки.</span>
+            </div>
             {% endif %}
             <div class="card-item__position-quantity">
-              {% if el.task_status_id == 7 or  el.task_status_id == 3 %}
+              {% if el.task_status_id == 7 or el.task_status_id == 3 or el.task_status_id == 8 %}
               <span class="card-item__title">{{el.task_profile_amount}}({{el.profile_amount_now}})</span>
               {%else%}
               <span class="card-item__title">{{el.task_profile_amount}}</span>
@@ -181,7 +188,7 @@
                 </div>
               </div>           
             </div>
-            {% elif el.task_status_id == 4 %}
+            {% elif el.task_status_id == 4 or el.task_status_id == 8 %}
             <div class="card-item__actions">
               <div class="actions__more-info">
                 <span class="more-info__text">Подробнее</span>
