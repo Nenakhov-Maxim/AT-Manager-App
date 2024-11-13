@@ -596,7 +596,23 @@ function videoStream(task_id){
         }
       })
       input_element.addEventListener('blur', () =>{
-        socket.send(JSON.stringify({chgVal: 1, isFs: 0, value: input_element.value}))  
+        let value = 0        
+        let input_data = input_element.value
+        // console.log(input_data)
+        if (input_data.includes('+')) {
+          let arr_data = input_data.split('+')
+          for (let i = 0; i < arr_data.length; i++) {
+            const element = Number(arr_data[i]);
+            value = value + element
+          }
+          // value = Number(arr_data[0]) + Number(arr_data[1])
+        } else {
+          value = e.target.value          
+        }
+        if (Number.isNaN(Number(value))) {
+          alert('Неверное значение количества профиля. Допустимы числа и операция сложения')
+        } else {
+        socket.send(JSON.stringify({chgVal: 1, isFs: 0, value: input_element.value}))}
       })
   };
   socket.onmessage = function(event) {
@@ -615,7 +631,6 @@ function videoStream(task_id){
 }
 
 // Изменение количества профиля вручную на наладке (на выполнении меняется через вебсоккет)
-let last_value_on_input = 0
 $(document).ready(function(){
   //С камерой - document.querySelectorAll('.task-card-item[data-category="Наладка"]')
   // Без камеры - document.querySelectorAll('.task-card-item[data-category="Выполняется"], .task-card-item[data-category="Наладка"]')
@@ -625,21 +640,22 @@ $(document).ready(function(){
       const card_element = profile_amount_input[item];
       let id_task = card_element.dataset.itemid                
       input_element = card_element.querySelector('.right-side__current-quantity__amount')
-      input_element.addEventListener('focus', function(e){
-        last_value_on_input = e.target.value
-      })            
+               
       input_element.addEventListener('keypress', function(e){        
         var key = e.which;
         if(key == 13)  {
           e.target.blur()}})
       input_element.addEventListener('blur', (e) =>{
-        let value
-        
+        let value = 0        
         let input_data = e.target.value
         // console.log(input_data)
         if (input_data.includes('+')) {
           let arr_data = input_data.split('+')
-          value = Number(arr_data[0]) + Number(arr_data[1])
+          for (let i = 0; i < arr_data.length; i++) {
+            const element = Number(arr_data[i]);
+            value = value + element
+          }
+          // value = Number(arr_data[0]) + Number(arr_data[1])
         } else {
           value = e.target.value          
         }
