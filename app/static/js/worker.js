@@ -615,6 +615,7 @@ function videoStream(task_id){
 }
 
 // Изменение количества профиля вручную на наладке (на выполнении меняется через вебсоккет)
+let last_value_on_input = 0
 $(document).ready(function(){
   //С камерой - document.querySelectorAll('.task-card-item[data-category="Наладка"]')
   // Без камеры - document.querySelectorAll('.task-card-item[data-category="Выполняется"], .task-card-item[data-category="Наладка"]')
@@ -623,21 +624,43 @@ $(document).ready(function(){
     if (Object.prototype.hasOwnProperty.call(profile_amount_input, item)) {
       const card_element = profile_amount_input[item];
       let id_task = card_element.dataset.itemid                
-      input_element = card_element.querySelector('.right-side__current-quantity__amount')            
+      input_element = card_element.querySelector('.right-side__current-quantity__amount')
+      input_element.addEventListener('focus', function(e){
+        last_value_on_input = e.target.value
+      })            
       input_element.addEventListener('keypress', function(e){        
         var key = e.which;
         if(key == 13)  {
           e.target.blur()}})
       input_element.addEventListener('blur', (e) =>{
+        let value
         
-        let link = 'edit-profile-amount-value/'
-        let data = {'id_task': id_task, 'value':e.target.value}
-        let type_request = 'GET'         
-        ajax_request(link, type_request, data)        
+        let input_data = e.target.value
+        // console.log(input_data)
+        if (input_data.includes('+')) {
+          let arr_data = input_data.split('+')
+          value = Number(arr_data[0]) + Number(arr_data[1])
+        } else {
+          value = e.target.value          
+        }
+        console.log(Number(value))
+        if (Number.isNaN(Number(value))) {
+          alert('Неверное значение количества профиля. Допустимы числа и операция сложения')
+        } else {
+          let link = 'edit-profile-amount-value/'
+          let data = {'id_task': id_task, 'value':Number(value)}
+          let type_request = 'GET'         
+          ajax_request(link, type_request, data)
+          e.target.value = value    
+        }
+            
       })
     }
   }
 })
+
+
+
 
 //Функция отправки запросов серверу
 function ajax_request(url, type,  data) {  

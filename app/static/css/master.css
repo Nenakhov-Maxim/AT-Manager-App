@@ -198,12 +198,12 @@
 
 .task-content {
   display: grid;
-  grid-template-rows: 10% 90%;
+  /* grid-template-rows: 10% 90%; */
 }
 
 .task-headers-list {
   display: grid;
-  grid-template-columns: 0.5fr 1.5fr 1.5fr 1fr 0.5fr 1fr;
+  grid-template-columns: 0.5fr 1.5fr 1.5fr 1fr 0.9fr 1fr;
   text-align: center;
   padding: 15px 5px 15px 5px;
   color: white;
@@ -242,7 +242,7 @@
 .task-card-item__wrapper {
   position: relative;
   display: grid;
-  grid-template-columns: 0.5fr 1.5fr 1.5fr 1fr 0.5fr 1fr;
+  grid-template-columns: 0.5fr 1.5fr 1.5fr 1fr 0.9fr 1fr;
   text-align: center;
   padding: 15px 5px 15px 5px;
   margin-bottom: 2px;
