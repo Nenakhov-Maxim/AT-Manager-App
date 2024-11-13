@@ -643,7 +643,7 @@ $(document).ready(function(){
         } else {
           value = e.target.value          
         }
-        console.log(Number(value))
+       
         if (Number.isNaN(Number(value))) {
           alert('Неверное значение количества профиля. Допустимы числа и операция сложения')
         } else {
@@ -664,7 +664,7 @@ $(document).ready(function(){
 
 //Функция отправки запросов серверу
 function ajax_request(url, type,  data) {  
-  console.log(url)
+  // console.log(url)
   $.ajax({
   
     url: url,
