@@ -16,13 +16,16 @@ class LoginUser(LoginView):
     
   
   def get_success_url(self):
+    print(self.request.user.get_group_permissions())
     if self.request.user.is_superuser:
       # print('Перенаправляем на admin-панель')
       return reverse_lazy('admin:index')
     elif 'master.view_tasks' in self.request.user.get_group_permissions():
+      print(self.request.user)
       # print('Перенаправляем на master')
       return reverse_lazy('master')
     elif 'worker.change_workertypeproblem' in self.request.user.get_group_permissions():
+      print(self.request.user)
       # print('Перенаправляем на worker')
       return reverse_lazy('worker')
  

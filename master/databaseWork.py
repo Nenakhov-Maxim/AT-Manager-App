@@ -9,8 +9,8 @@ class DatabaseWork:
     self.data = data
     self.history_id = -1
     self.new_task_id = -1
-    self.now = datetime.datetime.now()  # pytz.timezone('Asia/Yekaterinburg')
-  
+    self.tz = pytz.timezone('Asia/Yekaterinburg')
+    self.now = self.tz.localize(datetime.datetime.now())   
   
   # Добавить новую задачу (мастер)  
   def add_new_task_data(self, user_name):
