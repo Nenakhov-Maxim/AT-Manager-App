@@ -28,6 +28,8 @@ class LoginUser(LoginView):
       print(self.request.user)
       # print('Перенаправляем на worker')
       return reverse_lazy('worker')
+    else:
+      return reverse_lazy('worker')
  
 
 def logout_user(request):
