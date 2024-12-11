@@ -15,21 +15,16 @@ class LoginUser(LoginView):
   extra_context = {'title': 'Авторизация'}
     
   
-  def get_success_url(self):
-    print(self.request.user.get_group_permissions())
+  def get_success_url(self):    
     if self.request.user.is_superuser:
       # print('Перенаправляем на admin-панель')
       return reverse_lazy('admin:index')
-    elif 'master.view_tasks' in self.request.user.get_group_permissions():
-      print(self.request.user)
+    elif 'master.view_tasks' in self.request.user.get_group_permissions():      
       # print('Перенаправляем на master')
       return reverse_lazy('master')
-    elif 'worker.change_workertypeproblem' in self.request.user.get_group_permissions():
-      print(self.request.user)
+    elif 'worker.change_workertypeproblem' in self.request.user.get_group_permissions():      
       # print('Перенаправляем на worker')
-      return reverse_lazy('worker')
-    else:
-      return reverse_lazy('worker')
+      return reverse_lazy('worker')    
  
 
 def logout_user(request):
