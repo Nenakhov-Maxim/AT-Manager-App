@@ -15,21 +15,27 @@ def worker_home(request, filter='all'):
   new_paused_form = PauseTaskForm()
   new_deny_form = DenyTaskForm()  
   now = datetime.datetime.now()
-  area_id = request.user.production_area_id
+  if request.META['REMOTE_ADDR']=='192.168.211.10':
+    user_prd_ar = 'Производственная линия № 1'
+    area_id = 1
+  else:
+    user_prd_ar = 'Неизвестная линия'
+    area_id = 0
+  #area_id = request.user.production_area_id
   tasks = Tasks.objects.all().filter(task_workplace=area_id, task_status_id__in=[3, 4, 7, 8]).order_by('-id')
   task_to_start = tasks.filter(task_status_id=4).count
   task_start= tasks.filter(task_status_id=3).count
-  user_info = [request.user.first_name, request.user.last_name, request.user.position, request.user.production_area_id]
+  user_info = [request.user.first_name, request.user.last_name, request.user.position, user_prd_ar]
   if filter == 'now':
     tasks = tasks.filter(task_timedate_start__lte = now)
   elif filter == 'week':    
     tasks = tasks.filter(task_timedate_start__lte = now + datetime.timedelta(days=5))
   elif filter == 'month':    
     tasks = tasks.filter(task_timedate_start__lte = now + datetime.timedelta(days=30))
-  
+  print(request.META) 
   return render(request, 'worker.html', {'filter': filter, 'tasks':tasks, 'task_to_start':task_to_start,
                                          'task_start':task_start, 'user_info':user_info, 'new_paused_form':new_paused_form,
-                                         'new_deny_form':new_deny_form})
+                                         'new_deny_form':new_deny_form, 'line_id':area_id})
 
 # Запуск задания в работу
 @login_required

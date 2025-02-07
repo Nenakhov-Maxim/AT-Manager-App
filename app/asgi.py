@@ -15,10 +15,10 @@ from channels.routing import ProtocolTypeRouter
 from channels.auth import AuthMiddlewareStack
 from channels.routing import URLRouter
 
-from worker.routing import ws_urlpatterns
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
+django_asgi_app = get_asgi_application()
 
+from worker.routing import ws_urlpatterns
 
 application = ProtocolTypeRouter({
   'http': get_asgi_application(),

@@ -10,7 +10,7 @@ $(document).ready(function() {
       task_id_list[element.dataset.itemid] = element.dataset.categoryId      
     }
   }  
-  const socket = new WebSocket(`ws://192.168.211.1/ws/task-transfer/${name_line}`);
+  const socket = new WebSocket(`ws://127.0.0.1:8000/ws/task-transfer/${name_line}`);
 
   socket.onopen = function() {
     socket.send(JSON.stringify({message:"start", task_list:task_id_list}))
@@ -581,7 +581,7 @@ function videoStream(task_id){
   const video = document.getElementById('videoElement');
   const canvas = document.getElementById('canvas');
   const context = canvas.getContext('2d');
-  const socket = new WebSocket(`ws://192.168.211.1/ws/video/${task_id}`);
+  const socket = new WebSocket(`ws://127.0.0.1:8000/ws/video/${task_id}`);
   const img = document.createElement('img');
   video.after(img); // Добавляем изображение на страницу
   navigator.mediaDevices.getUserMedia({ video: true })
