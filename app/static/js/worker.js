@@ -710,12 +710,13 @@ function ajax_request(url, type,  data) {
     success: function(answer){
 
       // console.log(url,data)
-      if (url == 'pause_task/' || url == 'deny_task/' || url == 'edit-profile-amount-value/') {
+      if (url.indexOf('pause_task') !== -1 || url.indexOf('deny_task') !== -1 || url.indexOf('edit-profile-amount-value') !== -1) {
 
-      } else
+      } else {
         console.log(answer)
         location.reload()
-
+      }
+        
     },
   
     error: function(){  

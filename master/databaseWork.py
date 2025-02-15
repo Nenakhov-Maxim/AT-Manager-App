@@ -1,7 +1,7 @@
 from .models import *
 from worker.models import *
 import datetime
-from datetime import timezone
+from datetime import timezone, timedelta
 import pytz
 
 class DatabaseWork:
@@ -9,8 +9,8 @@ class DatabaseWork:
     self.data = data
     self.history_id = -1
     self.new_task_id = -1
-    self.tz = pytz.timezone('Asia/Yekaterinburg')
-    self.now = self.tz.localize(datetime.datetime.now())   
+    self.tz = pytz.timezone('UTC') #'Asia/Yekaterinburg
+    self.now = self.tz.localize(datetime.datetime.now()) + timedelta(hours=10)    
   
   # Добавить новую задачу (мастер)  
   def add_new_task_data(self, user_name):

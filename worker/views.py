@@ -21,6 +21,8 @@ def worker_home(request, filter='all'):
   else:
     user_prd_ar = 'Неизвестная линия'
     area_id = 0
+  #Удалить при реальной эксплуатации
+  area_id = 1
   #area_id = request.user.production_area_id
   tasks = Tasks.objects.all().filter(task_workplace=area_id, task_status_id__in=[3, 4, 7, 8]).order_by('-id')
   task_to_start = tasks.filter(task_status_id=4).count
@@ -94,7 +96,7 @@ def pause_task(request):
         return redirect('/worker', permanent=True)
       else:
         return HttpResponse(f'Ошибка: {new_task_file}')
-  elif request.method == 'GET':
+  elif request.method == 'GET':    
     id_task = request.GET.get('id_task')    
     return HttpResponse(f'Данные отправлены на сервер, id записи: {id_task}') 
   else:
@@ -104,7 +106,7 @@ def pause_task(request):
 @login_required
 @permission_required(perm='worker.change_workertypeproblem', raise_exception=True)     
 def deny_task(request):
-  global id_task  
+  global id_task   
   if request.method == 'POST':    
     new_deny_form = DenyTaskForm(request.POST)    
     if new_deny_form.is_valid():      
@@ -118,7 +120,7 @@ def deny_task(request):
       else:
         
         return HttpResponse(f'Ошибка: {new_task_file}')
-  elif request.method == 'GET':
+  elif request.method == 'GET':       
     id_task = request.GET.get('id_task') 
        
     return HttpResponse(f'Данные отправлены на сервер, id записи: {id_task}') 
